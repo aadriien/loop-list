@@ -14,3 +14,46 @@ body {
   color: var(--fg);
   font-family: system-ui, sans-serif;
 }
+
+main {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.row label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+input:not([type="checkbox"]),
+select,
+button {
+  min-height: 44px;
+  padding: 0 12px;
+  font: inherit;
+}
+
+form input {
+  flex: 1;
+  min-width: 0;
+}
+
+.player {
+  aspect-ratio: 16 / 9;
+  margin-top: 12px;
+  background: #000;
+}
+
+.error {
+  color: #f66;
+}
