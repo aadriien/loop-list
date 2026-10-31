@@ -112,7 +112,7 @@ Rules: a type used in more than one file lives in `types/`; a helper used in mor
 ### 4.4 Makefile targets
 | Target | Does |
 |---|---|
-| `make setup` | `npm ci` (install exact deps) |
+| `make setup` | `npm install` (all deps are declared in `package.json`; commit the generated `package-lock.json` so CI's `npm ci` works) |
 | `make run` | Vite dev server |
 | `make build` | Production build to `dist/` |
 | `make preview` | Serve the production build locally |
