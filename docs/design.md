@@ -20,6 +20,7 @@ Later, grow it into a personal library (favorites, tags, history, playlists) tha
 - **Few dependencies.** Only where strictly necessary; prefer the platform (DOM, `URLSearchParams`, `fetch`).
 - **Clean organization** (section 4.3). Reuse existing code before writing new code.
 - **Human-friendly code.** AI writes it, a human must be able to read and change it easily.
+- **Claude never takes git write actions** (add/commit/push/etc.). The human does all git and reviews every proposed change in the editor before approving. No Makefile target or script may run git write commands.
 - **Website only**, PWA-installable, works on desktop and iPhone Safari.
 - User has **no YouTube Premium**, uses an **iPhone**, usually has **one loop per song**.
 - Hosting: **GitHub Pages** (static). Backend later, tiny: Supabase or similar, or the owner's Linux cluster with community auth.
@@ -119,7 +120,7 @@ Rules: a type used in more than one file lives in `types/`; a helper used in mor
 | `make lint` | Biome check (no writes) |
 | `make format` | Biome format + safe fixes (writes) |
 | `make check` | typecheck + lint + test (what CI runs) |
-| `make deploy` | `make check`, then push to `main`; the GitHub Actions workflow builds and publishes to Pages |
+| `make deploy` | `make check` then `make build`, then prints a reminder to push `main`. Contains no git commands: the human pushes, and the GitHub Actions workflow publishes to Pages |
 | `make clean` | Remove `dist/` and caches (keep `node_modules`); `make nuke` also removes `node_modules` |
 
 Keep the Makefile thin: each target is one or two lines calling `npm run <script>` or the tool directly. `.PHONY` everything.
@@ -254,6 +255,7 @@ LoopTube.xyz / looptube.io (minimal reference), YouTube On Loop (A/B, speed, loo
 | 2026-10-31 | Never store video duration in URL or state. |
 | 2026-10-31 | Stack: TypeScript + React + Vite, plain CSS, Biome, Vitest. Runtime deps: react, react-dom only. |
 | 2026-10-31 | Organize by kind (components/hooks/lib/types/constants/styles); minimal-code conventions in 4.5. |
+| 2026-10-31 | Claude never runs git write actions; human handles all git and reviews all changes. Makefile contains no git commands. |
 | 2026-10-31 | Makefile is the entry point for setup/run/build/test/lint/deploy/clean. |
 | 2026-10-31 | Hosting on GitHub Pages via Actions; PWA via manifest only, no service worker yet. |
 | 2026-10-31 | Backend (Supabase vs owner's cluster) deferred until after local library. |
