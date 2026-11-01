@@ -1,15 +1,17 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { LIBRARY_STORAGE_KEY } from "../src/constants/library";
+import { ID_PATTERN } from "../src/lib/ids";
 import { loadLibrary, saveLibrary } from "../src/lib/libraryStorage";
 import type { SavedLoop } from "../src/types/library";
 
 const loop: SavedLoop = {
-  id: "a",
+  id: "0123456789abcde",
   videoId: "dQw4w9WgXcQ",
   title: "Song",
   start: 12.5,
   end: 48,
   rate: 0.75,
+  updatedAt: 1700000000000,
 };
 
 describe("libraryStorage", () => {
@@ -37,5 +39,16 @@ describe("libraryStorage", () => {
   it.each(["not json", '{"a":1}'])("ignores corrupt data %j", (raw) => {
     store.set(LIBRARY_STORAGE_KEY, raw);
     expect(loadLibrary()).toEqual([]);
+  });
+
+  it("upgrades loops saved before sync existed", () => {
+    const { updatedAt: _, ...legacy } = loop;
+    store.set(
+      LIBRARY_STORAGE_KEY,
+      JSON.stringify([{ ...legacy, id: crypto.randomUUID() }]),
+    );
+    const [upgraded] = loadLibrary();
+    expect(upgraded.id).toMatch(ID_PATTERN);
+    expect(upgraded.updatedAt).toBe(0);
   });
 });
