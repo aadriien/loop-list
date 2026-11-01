@@ -16,11 +16,14 @@ import type { LoopState } from "./types/loop";
 export default function App() {
   const [state, setState] = useUrlState();
   const [theme, setTheme] = useTheme();
-  const { token, signIn, signOut } = useAuth();
   const { loops, all, setAll, add, update: updateLoop, remove } = useLibrary();
-  const syncStatus = useSync(token, all, setAll, signOut);
   const [loadKey, setLoadKey] = useState(0);
   const [activeId, setActiveId] = useState<string | null>(null);
+  const { token, signIn, signOut, dropSession } = useAuth(() => {
+    setAll([]);
+    setActiveId(null);
+  });
+  const syncStatus = useSync(token, all, setAll, dropSession);
 
   const update = (patch: Partial<LoopState>) =>
     setState((s) => ({ ...s, ...patch }));
