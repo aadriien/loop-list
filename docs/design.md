@@ -113,7 +113,10 @@ Rules: a type used in more than one file lives in `types/`; a helper used in mor
 | Target | Does |
 |---|---|
 | `make setup` | `npm install` (all deps are declared in `package.json`; commit the generated `package-lock.json` so CI's `npm ci` works) |
-| `make run` | Vite dev server |
+| `make run` | Starts `make backend` and `make frontend` together (Ctrl-C stops both) |
+| `make backend` | Local PocketBase for development: downloads the binary into `.pb/` on first use, applies `pb_migrations/` and `pb_hooks/`, keeps data in `.pb/data`, serves on 127.0.0.1:8090. Dashboard at `/_/`; the throwaway dev admin login comes from a gitignored `.env` (copy `.env.example`; `make run` stops with a message if it is missing) |
+| `make frontend` | Vite dev server; `/api` is proxied to the local PocketBase (see `vite.config.ts`) |
+| `make pb-reset` | Delete the local PocketBase data (`.pb/data`); recreate the dev user afterwards |
 | `make build` | Production build to `dist/` |
 | `make preview` | Serve the production build locally |
 | `make test` | Vitest, single run |
@@ -121,7 +124,7 @@ Rules: a type used in more than one file lives in `types/`; a helper used in mor
 | `make format` | Biome format + safe fixes (writes) |
 | `make check` | typecheck + lint + test (what CI runs) |
 | `make deploy` | `make check` then `make build`, then prints a reminder to push `main`. Contains no git commands: the human pushes, and the GitHub Actions workflow publishes to Pages |
-| `make clean` | Remove `dist/` and caches (keep `node_modules`); `make nuke` also removes `node_modules` |
+| `make clean` | Remove `dist/` and caches (keep `node_modules`); `make nuke` also removes `node_modules` and `.pb/` |
 
 Keep the Makefile thin: each target is one or two lines calling `npm run <script>` or the tool directly. `.PHONY` everything.
 
@@ -245,6 +248,9 @@ interface Loop {
 | Export/import JSON | No backend | Manual |
 
 Single user: one list of loops per user. UI never knows which backend is in use.
+
+#### Local development
+`make run` runs a local PocketBase beside the Vite dev server, so sync and sign-in work on localhost without touching the live Pi. It uses the repo's own migrations and hook, so a new migration can be tried locally before deploying. One-time setup: open `http://127.0.0.1:8090/_/`, sign in as the dev admin, and add a dev user (any throwaway email and password) to the `users` collection; then sign in once from the Sync box on the dev site. The token is kept in that origin's `localStorage`. Local and live accounts are independent.
 
 #### Backups (to revisit on a regular cadence)
 The database is a SQLite file on the `pb-data` volume on the Raspberry Pi (presumably an SD card). The volume survives redeploys, but not a dead disk, a deleted project/volume, or an admin wiping the shared instance. Device `localStorage` copies are a partial safety net, not a backup. Not set up yet; ideas, none verified:
