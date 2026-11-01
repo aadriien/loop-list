@@ -22,4 +22,6 @@ export function mergeLoops(local: SavedLoop[], remote: SavedLoop[]) {
 
 export const sameLoops = (a: SavedLoop[], b: SavedLoop[]) =>
   a.length === b.length &&
-  a.every((loop, i) => loop.id === b[i].id && loop.updatedAt === b[i].updatedAt);
+  a.every(
+    (loop, i) => loop.id === b[i].id && loop.updatedAt === b[i].updatedAt,
+  );
