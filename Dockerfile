@@ -13,5 +13,6 @@ RUN apk add --no-cache ca-certificates unzip wget \
  && unzip /tmp/pb.zip pocketbase -d /pb \
  && rm /tmp/pb.zip
 COPY --from=build /app/dist /pb/pb_public
+COPY pb_migrations /pb/pb_migrations
 EXPOSE 8090
-CMD ["/pb/pocketbase", "serve", "--http=0.0.0.0:8090", "--dir=/pb/pb_data", "--publicDir=/pb/pb_public"]
+CMD ["/pb/pocketbase", "serve", "--http=0.0.0.0:8090", "--dir=/pb/pb_data", "--publicDir=/pb/pb_public", "--migrationsDir=/pb/pb_migrations"]
