@@ -11,6 +11,7 @@ export default function App() {
 
   return (
     <main>
+      <h1>loop-list</h1>
       <VideoInput
         onLoad={({ id, start }) =>
           setState({ ...DEFAULT_STATE, videoId: id, start: start ?? 0 })

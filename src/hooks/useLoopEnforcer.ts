@@ -1,9 +1,7 @@
 import { useEffect } from "react";
-import { PLAYER_STATE } from "../constants/youtube";
+import { PLAYER_STATE, POLL_MS } from "../constants/youtube";
 import type { LoopState } from "../types/loop";
 import type { YTPlayer } from "../types/youtube";
-
-const POLL_MS = 100;
 
 export function useLoopEnforcer(
   player: YTPlayer | null,

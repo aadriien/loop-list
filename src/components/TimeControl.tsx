@@ -17,6 +17,7 @@ export default function TimeControl({ label, value, onChange, now }: Props) {
       <label>
         {label}
         <input
+          className="time"
           key={value}
           defaultValue={display(value)}
           placeholder="end of video"

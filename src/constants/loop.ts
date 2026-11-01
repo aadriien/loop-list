@@ -10,4 +10,8 @@ export const DEFAULT_STATE: LoopState = {
 
 export const DEFAULT_RATES = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2];
 
-export const NUDGES = [-1, -0.1, 0.1, 1];
+export const NUDGES = [-0.1, 0.1];
+
+export const SKIP_SECONDS = 5;
+
+export const URL_SYNC_MS = 250;

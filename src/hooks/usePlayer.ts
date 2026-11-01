@@ -21,6 +21,8 @@ export function usePlayer(videoId: string, start: number, rate: number) {
   const [player, setPlayer] = useState<YTPlayer | null>(null);
   const [rates, setRates] = useState(DEFAULT_RATES);
   const [error, setError] = useState<number | null>(null);
+  const [playing, setPlaying] = useState(false);
+  const [duration, setDuration] = useState(0);
   const latest = useRef({ videoId, start, rate });
   latest.current = { videoId, start, rate };
   const loadedId = useRef(videoId);
@@ -42,10 +44,14 @@ export function usePlayer(videoId: string, start: number, rate: number) {
         events: {
           onReady: (e) => {
             setRates(e.target.getAvailablePlaybackRates());
+            setDuration(e.target.getDuration());
             setPlayer(e.target);
           },
           // Loading a video resets the rate to 1, so re-apply it once playback starts
           onStateChange: (e) => {
+            setPlaying(e.data === PLAYER_STATE.PLAYING);
+            // getDuration() is 0 until metadata loads, so never overwrite with 0
+            setDuration((d) => e.target.getDuration() || d);
             if (e.data === PLAYER_STATE.PLAYING)
               e.target.setPlaybackRate(latest.current.rate);
           },
@@ -65,6 +71,7 @@ export function usePlayer(videoId: string, start: number, rate: number) {
     if (!player || loadedId.current === videoId) return;
     loadedId.current = videoId;
     setError(null);
+    setDuration(0);
     player.loadVideoById({ videoId, startSeconds: latest.current.start });
   }, [player, videoId]);
 
@@ -72,5 +79,5 @@ export function usePlayer(videoId: string, start: number, rate: number) {
     player?.setPlaybackRate(rate);
   }, [player, rate]);
 
-  return { hostRef, player, rates, error };
+  return { hostRef, player, rates, error, playing, duration };
 }

@@ -1,0 +1,13 @@
+:root {
+  --bg: #111;
+  --surface: #1a1a1f;
+  --text: #eee;
+  --muted: #9a9aa5;
+  --accent: #4fd1c5;
+  --border: #2e2e36;
+  --error: #f66;
+  --radius: 10px;
+  --font-body: system-ui, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
+  color-scheme: dark;
+}
