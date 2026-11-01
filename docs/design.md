@@ -220,6 +220,8 @@ Order: try A, then reassess.
 ## 8. Later stages (sketch)
 
 ### Stage 2: Local library
+
+**First slice (built):** save the current loop, list saved loops, click to load, delete. Stored in `localStorage` (`loop-list-library`) via `lib/libraryStorage.ts` and `hooks/useLibrary.ts`; those two files are the seam to replace when sync arrives. Layout is a responsive side panel (`components/Library.tsx`): a right-hand column from 900px up, stacked below the player on phones. No drawer, which keeps it one page and leaves room for favorites, tags, filters and a play queue. `SavedLoop` is denormalized for now (title stored on the loop; no separate `Video` record). Everything below beyond that (favorites, tags, recents, rename, duplicates handling) is not built.
 Keep **video** separate from **loop** (usually one loop per song, but allow several):
 ```ts
 interface Video { id: string; title: string; thumbnailUrl: string }  // via YouTube oEmbed, no API key
@@ -265,4 +267,5 @@ LoopTube.xyz / looptube.io (minimal reference), YouTube On Loop (A/B, speed, loo
 | 2026-10-31 | Makefile is the entry point for setup/run/build/test/lint/deploy/clean. |
 | 2026-10-31 | Hosting on GitHub Pages via Actions; PWA via manifest only, no service worker yet. |
 | 2026-10-31 | Backend (Supabase vs owner's cluster) deferred until after local library. |
+| 2026-11-01 | Next after MVP: local library (save/list in localStorage), then a tiny backend for cross-device sync; favorites/tags/recents, theme and PWA polish come after. Library UI is a responsive side panel. |
 | 2026-10-31 | Themes are CSS-only token skins switched via `data-theme`, stored in localStorage (section 4.7). |
