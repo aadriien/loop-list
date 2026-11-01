@@ -1,0 +1,98 @@
+:root[data-theme="cozy"] {
+  --bg: #2a1a14;
+  --surface: #4a2e22;
+  --text: #f6e7d3;
+  --muted: #c9a98a;
+  --accent: #f4a259;
+  --border: #6b4533;
+  --error: #ff9b8a;
+  --radius: 22px;
+  --font-body: ui-rounded, "Avenir Next", system-ui, sans-serif;
+  --font-mono: ui-rounded, "Avenir Next", system-ui, sans-serif;
+  color-scheme: dark;
+}
+
+:root[data-theme="cozy"] body {
+  background:
+    radial-gradient(
+      circle at 12% 0%,
+      rgba(255, 190, 110, 0.32),
+      transparent 45%
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.1) 0 3px,
+      transparent 3px 7px
+    ),
+    #2a1a14;
+  background-attachment: fixed;
+}
+
+:root[data-theme="cozy"] body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: -1;
+  height: 28px;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      circle at 12px 12px,
+      #ffd58a 0 4px,
+      rgba(255, 200, 120, 0.35) 5px 9px,
+      transparent 10px
+    )
+    0 0 / 48px 28px repeat-x,
+    linear-gradient(rgba(255, 213, 138, 0.4), rgba(255, 213, 138, 0.4)) 0 11px /
+    100% 2px no-repeat;
+}
+
+:root[data-theme="cozy"] main {
+  padding-top: 36px;
+}
+
+:root[data-theme="cozy"] h1 {
+  color: var(--accent);
+  letter-spacing: 0.04em;
+  text-transform: lowercase;
+  text-shadow: 0 0 16px rgba(244, 162, 89, 0.45);
+}
+
+:root[data-theme="cozy"] h1::after {
+  content: " ☾";
+}
+
+:root[data-theme="cozy"] button {
+  font-weight: 600;
+  background: #5a3a2a;
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, 0.12),
+    0 3px 0 rgba(0, 0, 0, 0.35);
+}
+
+:root[data-theme="cozy"] button:active:not(:disabled) {
+  transform: translateY(2px);
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.12);
+}
+
+:root[data-theme="cozy"] .player {
+  position: relative;
+  box-sizing: content-box;
+  border: 10px solid #5a3a28;
+  box-shadow:
+    0 0 0 3px #1a0f0a,
+    0 0 50px rgba(255, 170, 90, 0.25),
+    0 14px 24px rgba(0, 0, 0, 0.45);
+}
+
+:root[data-theme="cozy"] .player::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at center, transparent 60%, rgba(40, 15, 0, 0.35)),
+    rgba(255, 150, 60, 0.06);
+}

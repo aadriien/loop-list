@@ -1,0 +1,85 @@
+:root[data-theme="jungle"] {
+  --bg: #0b2616;
+  --surface: #1d4630;
+  --text: #f3ecd2;
+  --muted: #b7c79a;
+  --accent: #f2b134;
+  --border: #2f6b46;
+  --error: #ff9b7a;
+  --radius: 14px;
+  --font-body: "Trebuchet MS", "Gill Sans", system-ui, sans-serif;
+  --font-mono: "Courier New", Courier, monospace;
+  color-scheme: dark;
+}
+
+:root[data-theme="jungle"] body {
+  background:
+    linear-gradient(105deg, rgba(255, 235, 150, 0.16), transparent 35%),
+    radial-gradient(ellipse at 50% 120%, rgba(10, 40, 20, 0.9), transparent 60%),
+    linear-gradient(#143d26, #0b2616);
+  background-attachment: fixed;
+}
+
+:root[data-theme="jungle"] body::before,
+:root[data-theme="jungle"] body::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  z-index: -1;
+  width: 280px;
+  height: 280px;
+  pointer-events: none;
+  background:
+    url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><g fill='%230f3d22'><ellipse cx='65.5' cy='6.1' rx='32' ry='6' transform='rotate(-10 65.5 6.1)'/><ellipse cx='77.5' cy='26.8' rx='32' ry='6' transform='rotate(-50 77.5 26.8)'/><ellipse cx='97' cy='34.9' rx='32' ry='6' transform='rotate(-85 97 34.9)'/></g><g fill='%231d6b3a'><ellipse cx='69.7' cy='17.5' rx='32' ry='6' transform='rotate(-30 69.7 17.5)'/><ellipse cx='88' cy='32.9' rx='32' ry='6' transform='rotate(-70 88 32.9)'/></g></svg>")
+    center / contain no-repeat;
+}
+
+:root[data-theme="jungle"] body::before {
+  right: 0;
+}
+
+:root[data-theme="jungle"] body::after {
+  left: 0;
+  transform: scaleX(-1);
+}
+
+:root[data-theme="jungle"] h1 {
+  font-family: Copperplate, "Gill Sans", "Trebuchet MS", sans-serif;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+:root[data-theme="jungle"] h1::before {
+  content: "❧ ";
+}
+
+:root[data-theme="jungle"] button {
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border-color: #8a6a3a;
+}
+
+:root[data-theme="jungle"] .player {
+  position: relative;
+  box-sizing: content-box;
+  margin: 10px;
+  border: 12px solid #6b4a24;
+  border-radius: 12px;
+  outline: 3px dashed #d9b36a;
+  outline-offset: 6px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.5);
+}
+
+:root[data-theme="jungle"] .player::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    120deg,
+    rgba(255, 230, 140, 0.12),
+    transparent 40%
+  );
+}

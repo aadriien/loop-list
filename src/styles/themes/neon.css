@@ -1,0 +1,66 @@
+:root[data-theme="neon"] {
+  --bg: #05010f;
+  --surface: #0f0630;
+  --text: #e6f7ff;
+  --muted: #8aa0c8;
+  --accent: #00e5ff;
+  --border: #3a1d7a;
+  --error: #ff4d8d;
+  --radius: 4px;
+  --font-body:
+    "Avenir Next Condensed", "DIN Alternate", "Bahnschrift", system-ui,
+    sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
+  color-scheme: dark;
+}
+
+:root[data-theme="neon"] body {
+  background:
+    linear-gradient(to top, rgba(255, 43, 214, 0.3), transparent 25%),
+    linear-gradient(#05010f, #14043a);
+  background-attachment: fixed;
+}
+
+:root[data-theme="neon"] body::after {
+  content: "";
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: -1;
+  height: 140px;
+  pointer-events: none;
+  background:
+    url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 40' preserveAspectRatio='none'><path fill='%23080218' stroke='%2300e5ff' stroke-width='.5' vector-effect='non-scaling-stroke' d='M0 40V24H10V16H20V24H26V8H38V24H46V18H58V4H66V18H76V26H84V10H96V26H106V14H120V6H128V14H136V22H148V12H156V22H166V16H176V26H186V20H200V40Z'/></svg>")
+    bottom / 100% 100% no-repeat;
+}
+
+:root[data-theme="neon"] h1 {
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  background: linear-gradient(90deg, #00e5ff, #ff2bd6);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+:root[data-theme="neon"] button {
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: transparent;
+  border-color: var(--accent);
+  box-shadow: 0 0 8px rgba(0, 229, 255, 0.35);
+}
+
+:root[data-theme="neon"] button:hover:not(:disabled) {
+  box-shadow: 0 0 16px rgba(0, 229, 255, 0.7);
+}
+
+:root[data-theme="neon"] .player {
+  border: 2px solid var(--accent);
+  border-radius: 4px;
+  box-shadow:
+    0 0 0 1px #05010f,
+    0 0 18px rgba(0, 229, 255, 0.6),
+    0 0 48px rgba(255, 43, 214, 0.3);
+}

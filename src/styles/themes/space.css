@@ -1,0 +1,96 @@
+:root[data-theme="space"] {
+  --bg: #02030a;
+  --surface: #0d1424;
+  --text: #dfe8f5;
+  --muted: #7f8ea8;
+  --accent: #ffd54a;
+  --border: #2d3c58;
+  --error: #ff6b6b;
+  --radius: 6px;
+  --font-body: "Avenir Next Condensed", "Arial Narrow", system-ui, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
+  color-scheme: dark;
+}
+
+:root[data-theme="space"] body {
+  background:
+    radial-gradient(circle at 25% 30%, #fff 0 1px, transparent 2px) 0 0 / 130px
+    130px,
+    radial-gradient(circle at 70% 70%, #cfe3ff 0 1px, transparent 2px) 0 0 /
+    90px 90px,
+    radial-gradient(circle at 50% 10%, #fff 0 0.7px, transparent 1.5px) 0 0 /
+    60px 60px,
+    radial-gradient(
+      ellipse at 80% 20%,
+      rgba(80, 60, 160, 0.25),
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse at 10% 90%,
+      rgba(20, 90, 140, 0.25),
+      transparent 50%
+    ),
+    #02030a;
+  background-attachment: fixed;
+}
+
+:root[data-theme="space"] body::before {
+  content: "";
+  position: fixed;
+  right: -140px;
+  bottom: -140px;
+  z-index: -1;
+  width: 360px;
+  height: 360px;
+  pointer-events: none;
+  background: radial-gradient(circle at 30% 30%, #7d92c9, #22305e 55%, #050913);
+  border-radius: 50%;
+  box-shadow: 0 0 60px rgba(100, 140, 255, 0.25);
+}
+
+:root[data-theme="space"] body::after {
+  content: "";
+  position: fixed;
+  right: -240px;
+  bottom: -30px;
+  z-index: -1;
+  width: 620px;
+  height: 120px;
+  pointer-events: none;
+  border: 3px solid rgba(255, 213, 74, 0.3);
+  border-radius: 50%;
+  transform: rotate(-18deg);
+}
+
+:root[data-theme="space"] h1 {
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--accent);
+  text-shadow: 0 0 14px rgba(255, 213, 74, 0.45);
+}
+
+:root[data-theme="space"] button {
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: linear-gradient(#1b2538, #0f1626);
+  border-color: #3b4a66;
+}
+
+:root[data-theme="space"] .player {
+  position: relative;
+  box-sizing: content-box;
+  border: 16px solid #1c2433;
+  border-radius: 14px;
+  box-shadow:
+    0 0 0 3px #3b4a66,
+    0 0 0 6px #0a0f1a,
+    0 0 40px rgba(92, 200, 255, 0.25);
+}
+
+:root[data-theme="space"] .player::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  box-shadow: inset 0 0 40px rgba(92, 200, 255, 0.25);
+}

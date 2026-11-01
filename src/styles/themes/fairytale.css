@@ -1,0 +1,65 @@
+:root[data-theme="fairytale"] {
+  --bg: #0b1240;
+  --surface: #241a63;
+  --text: #fff6e0;
+  --muted: #c9bfff;
+  --accent: #f2c94c;
+  --border: #6b57c7;
+  --error: #ff9aa8;
+  --radius: 999px;
+  --font-body: "Avenir Next", "Trebuchet MS", system-ui, sans-serif;
+  --font-mono: "Avenir Next", "Trebuchet MS", system-ui, sans-serif;
+  color-scheme: dark;
+}
+
+:root[data-theme="fairytale"] body {
+  background:
+    radial-gradient(circle at 20% 15%, #fff 0 1.5px, transparent 2.5px) 0 0 /
+    110px 110px,
+    radial-gradient(circle at 75% 55%, #ffe9a8 0 1.2px, transparent 2.2px) 0 0 /
+    80px 80px,
+    linear-gradient(#0b1240, #3a1a6e 65%, #7a2f95);
+  background-attachment: fixed;
+}
+
+:root[data-theme="fairytale"] body::after {
+  content: "";
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  z-index: -1;
+  width: min(640px, 100%);
+  aspect-ratio: 5 / 2;
+  transform: translateX(-50%);
+  pointer-events: none;
+  background:
+    url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 80'><path fill='%23140a35' d='M0 80V62H18V46L24 30L30 46V62H48V50H58V34L65 16L72 34V50H84V28L100 0L116 28V50H128V34L135 16L142 34V50H152V62H170V46L176 30L182 46V62H200V80Z'/></svg>")
+    center / contain no-repeat;
+}
+
+:root[data-theme="fairytale"] h1 {
+  font-family: "Snell Roundhand", "Apple Chancery", "Brush Script MT", cursive;
+  font-size: 1.9rem;
+  color: var(--accent);
+  text-shadow: 0 0 14px rgba(255, 220, 120, 0.6);
+}
+
+:root[data-theme="fairytale"] h1::after {
+  content: " ✦";
+}
+
+:root[data-theme="fairytale"] button {
+  font-weight: 700;
+  color: #3a2400;
+  background: linear-gradient(#ffe38a, #e0a92a);
+  border-color: #fff3c4;
+  box-shadow: 0 2px 10px rgba(242, 201, 76, 0.4);
+}
+
+:root[data-theme="fairytale"] .player {
+  border: 6px solid var(--accent);
+  border-radius: 22px;
+  box-shadow:
+    0 0 0 3px #7a4f00,
+    0 0 40px rgba(255, 220, 120, 0.45);
+}
