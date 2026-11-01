@@ -236,6 +236,8 @@ interface Loop {
 - Features: save current setup, favorites, tags, recent, search. Organization = favorite flag + tags; no nested folders.
 
 ### Stage 3: Sync
+
+**Built (first slice):** self-hosted PocketBase on a Disco instance (Raspberry Pi), one container serving the app, the API and the admin UI (`/_/`) at one origin; data in SQLite on the `pb-data` volume. Schema lives in `pb_migrations/` (new files for changes, never edit applied ones; don't change the schema by clicking in the production dashboard). Registration is closed; the single account is created in the admin UI. Client: local-first (`localStorage` stays the working copy); `hooks/useSync.ts` pulls, merges (newest `updatedAt` wins per loop, deletions are `deleted` tombstones; see `lib/mergeLoops.ts`) and pushes, on changes (debounced) and when the tab becomes visible. Email/password sign-in via `hooks/useAuth.ts`. All loops are shared by any signed-in account (no per-user ownership). Not built: community OAuth, sync indicator polish, conflict UI, more than 500 loops (single page fetch), backups.
 | Option | Pro | Con |
 |---|---|---|
 | Supabase | Auth + Postgres + RLS, little code | External service |
@@ -268,4 +270,5 @@ LoopTube.xyz / looptube.io (minimal reference), YouTube On Loop (A/B, speed, loo
 | 2026-10-31 | Hosting on GitHub Pages via Actions; PWA via manifest only, no service worker yet. |
 | 2026-10-31 | Backend (Supabase vs owner's cluster) deferred until after local library. |
 | 2026-11-01 | Next after MVP: local library (save/list in localStorage), then a tiny backend for cross-device sync; favorites/tags/recents, theme and PWA polish come after. Library UI is a responsive side panel. |
+| 2026-11-01 | Backend is self-hosted PocketBase on a Disco instance, serving app + API from one container; local-first sync with last-write-wins per loop; email/password auth first, community OAuth later. |
 | 2026-10-31 | Themes are CSS-only token skins switched via `data-theme`, stored in localStorage (section 4.7). |
