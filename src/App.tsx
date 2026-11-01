@@ -7,19 +7,26 @@ import { DEFAULT_STATE } from "./constants/loop";
 import { useLibrary } from "./hooks/useLibrary";
 import { useTheme } from "./hooks/useTheme";
 import { useUrlState } from "./hooks/useUrlState";
+import type { SavedLoop } from "./types/library";
 import type { LoopState } from "./types/loop";
 
 export default function App() {
   const [state, setState] = useUrlState();
   const [theme, setTheme] = useTheme();
-  const { loops, add, remove } = useLibrary();
+  const { loops, add, update: updateLoop, remove } = useLibrary();
   const [loadKey, setLoadKey] = useState(0);
+  const [activeId, setActiveId] = useState<string | null>(null);
 
   const update = (patch: Partial<LoopState>) =>
     setState((s) => ({ ...s, ...patch }));
-  const load = (patch: Partial<LoopState>) => {
+  const load = (patch: Partial<LoopState>, id: string | null = null) => {
     setState({ ...DEFAULT_STATE, ...patch });
     setLoadKey((k) => k + 1);
+    setActiveId(id);
+  };
+  const rename = (loop: SavedLoop) => {
+    const title = window.prompt("Rename loop", loop.title)?.trim();
+    if (title) updateLoop(loop.id, { title });
   };
 
   return (
@@ -39,13 +46,25 @@ export default function App() {
               loadKey={loadKey}
               onChange={update}
               onSave={(title) =>
-                add({
-                  videoId: state.videoId,
-                  title: title || state.videoId,
-                  start: state.start,
-                  end: state.end,
-                  rate: state.rate,
-                })
+                setActiveId(
+                  add({
+                    videoId: state.videoId,
+                    title: title || state.videoId,
+                    start: state.start,
+                    end: state.end,
+                    rate: state.rate,
+                  }),
+                )
+              }
+              onUpdate={
+                activeId
+                  ? () =>
+                      updateLoop(activeId, {
+                        start: state.start,
+                        end: state.end,
+                        rate: state.rate,
+                      })
+                  : undefined
               }
             />
           ) : (
@@ -54,10 +73,15 @@ export default function App() {
         </div>
         <Library
           loops={loops}
-          onSelect={({ videoId, start, end, rate }) =>
-            load({ videoId, start, end, rate })
+          activeId={activeId}
+          onSelect={({ id, videoId, start, end, rate }) =>
+            load({ videoId, start, end, rate }, id)
           }
-          onRemove={remove}
+          onRename={rename}
+          onRemove={(id) => {
+            remove(id);
+            if (id === activeId) setActiveId(null);
+          }}
         />
       </div>
     </main>

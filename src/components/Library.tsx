@@ -3,11 +3,19 @@ import type { SavedLoop } from "../types/library";
 
 interface Props {
   loops: SavedLoop[];
+  activeId: string | null;
   onSelect: (loop: SavedLoop) => void;
+  onRename: (loop: SavedLoop) => void;
   onRemove: (id: string) => void;
 }
 
-export default function Library({ loops, onSelect, onRemove }: Props) {
+export default function Library({
+  loops,
+  activeId,
+  onSelect,
+  onRename,
+  onRemove,
+}: Props) {
   return (
     <aside className="library">
       <h2>Saved loops</h2>
@@ -16,7 +24,7 @@ export default function Library({ loops, onSelect, onRemove }: Props) {
       ) : (
         <ul>
           {loops.map((loop) => (
-            <li key={loop.id}>
+            <li key={loop.id} className={loop.id === activeId ? "active" : ""}>
               <button
                 type="button"
                 className="item"
@@ -28,6 +36,13 @@ export default function Library({ loops, onSelect, onRemove }: Props) {
                   {loop.end === null ? "end" : formatTime(loop.end)} ·{" "}
                   {loop.rate}×
                 </span>
+              </button>
+              <button
+                type="button"
+                aria-label={`Rename ${loop.title}`}
+                onClick={() => onRename(loop)}
+              >
+                ✎
               </button>
               <button
                 type="button"

@@ -7,10 +7,17 @@ export function useLibrary() {
 
   useEffect(() => saveLibrary(loops), [loops]);
 
-  const add = (loop: Omit<SavedLoop, "id">) =>
-    setLoops((all) => [{ ...loop, id: crypto.randomUUID() }, ...all]);
+  const add = (loop: Omit<SavedLoop, "id">) => {
+    const id = crypto.randomUUID();
+    setLoops((all) => [{ ...loop, id }, ...all]);
+    return id;
+  };
+  const update = (id: string, patch: Partial<Omit<SavedLoop, "id">>) =>
+    setLoops((all) =>
+      all.map((loop) => (loop.id === id ? { ...loop, ...patch } : loop)),
+    );
   const remove = (id: string) =>
     setLoops((all) => all.filter((loop) => loop.id !== id));
 
-  return { loops, add, remove };
+  return { loops, add, update, remove };
 }

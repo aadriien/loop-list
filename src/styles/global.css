@@ -93,6 +93,12 @@ a {
   text-align: left;
 }
 
+.library .active .item {
+  background: color-mix(in srgb, var(--accent) 18%, var(--surface));
+  border-color: var(--accent);
+  box-shadow: inset 4px 0 0 var(--accent);
+}
+
 .library .title {
   max-width: 100%;
   overflow: hidden;

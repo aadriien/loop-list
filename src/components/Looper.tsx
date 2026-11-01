@@ -11,9 +11,16 @@ interface Props {
   loadKey: number;
   onChange: (patch: Partial<LoopState>) => void;
   onSave: (title: string) => void;
+  onUpdate?: () => void;
 }
 
-export default function Looper({ state, loadKey, onChange, onSave }: Props) {
+export default function Looper({
+  state,
+  loadKey,
+  onChange,
+  onSave,
+  onUpdate,
+}: Props) {
   const { hostRef, player, rates, error, playing, duration } = usePlayer(
     state.videoId,
     state.start,
@@ -89,6 +96,11 @@ export default function Looper({ state, loadKey, onChange, onSave }: Props) {
             />
             Loop
           </label>
+          {onUpdate && (
+            <button type="button" onClick={onUpdate}>
+              Update loop
+            </button>
+          )}
           <button
             type="button"
             onClick={() => onSave(player?.getVideoData().title ?? "")}
