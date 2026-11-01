@@ -1,4 +1,4 @@
-import { type FormEvent, useState } from "react";
+import { type SubmitEvent, useState } from "react";
 import { parseVideoInput } from "../lib/parseVideoInput";
 import type { ParsedVideo } from "../types/loop";
 
@@ -10,7 +10,7 @@ export default function VideoInput({
   const [text, setText] = useState("");
   const [invalid, setInvalid] = useState(false);
 
-  function submit(e: FormEvent) {
+  function submit(e: SubmitEvent) {
     e.preventDefault();
     const video = parseVideoInput(text);
     setInvalid(!video);

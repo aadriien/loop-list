@@ -1,10 +1,13 @@
 import { useState } from "react";
 import Library from "./components/Library";
 import Looper from "./components/Looper";
+import SyncPanel from "./components/SyncPanel";
 import ThemePicker from "./components/ThemePicker";
 import VideoInput from "./components/VideoInput";
 import { DEFAULT_STATE } from "./constants/loop";
+import { useAuth } from "./hooks/useAuth";
 import { useLibrary } from "./hooks/useLibrary";
+import { useSync } from "./hooks/useSync";
 import { useTheme } from "./hooks/useTheme";
 import { useUrlState } from "./hooks/useUrlState";
 import type { SavedLoop } from "./types/library";
@@ -13,7 +16,9 @@ import type { LoopState } from "./types/loop";
 export default function App() {
   const [state, setState] = useUrlState();
   const [theme, setTheme] = useTheme();
-  const { loops, add, update: updateLoop, remove } = useLibrary();
+  const { token, signIn, signOut } = useAuth();
+  const { loops, all, setAll, add, update: updateLoop, remove } = useLibrary();
+  const syncStatus = useSync(token, all, setAll, signOut);
   const [loadKey, setLoadKey] = useState(0);
   const [activeId, setActiveId] = useState<string | null>(null);
 
@@ -71,18 +76,26 @@ export default function App() {
             <p className="hint">Paste a YouTube link to start looping.</p>
           )}
         </div>
-        <Library
-          loops={loops}
-          activeId={activeId}
-          onSelect={({ id, videoId, start, end, rate }) =>
-            load({ videoId, start, end, rate }, id)
-          }
-          onRename={rename}
-          onRemove={(id) => {
-            remove(id);
-            if (id === activeId) setActiveId(null);
-          }}
-        />
+        <div className="side">
+          <Library
+            loops={loops}
+            activeId={activeId}
+            onSelect={({ id, videoId, start, end, rate }) =>
+              load({ videoId, start, end, rate }, id)
+            }
+            onRename={rename}
+            onRemove={(id) => {
+              remove(id);
+              if (id === activeId) setActiveId(null);
+            }}
+          />
+          <SyncPanel
+            signedIn={token !== null}
+            status={syncStatus}
+            onSignIn={signIn}
+            onSignOut={signOut}
+          />
+        </div>
       </div>
     </main>
   );
