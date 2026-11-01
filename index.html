@@ -7,6 +7,12 @@
     <link rel="icon" href="/icon.svg" type="image/svg+xml" />
     <link rel="manifest" href="/manifest.webmanifest" />
     <title>loop-list</title>
+    <script>
+      try {
+        const theme = localStorage.getItem("loop-list-theme");
+        if (theme) document.documentElement.dataset.theme = theme;
+      } catch {}
+    </script>
   </head>
   <body>
     <div id="root"></div>

@@ -1,0 +1,11 @@
+:root[data-theme="airy"] {
+  --bg: #f4f9ff;
+  --surface: #fff;
+  --text: #1d2b3a;
+  --muted: #6b7c8f;
+  --accent: #3b9ae1;
+  --border: #d6e4f2;
+  --error: #d33;
+  --radius: 14px;
+  color-scheme: light;
+}

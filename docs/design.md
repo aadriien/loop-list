@@ -142,6 +142,12 @@ These exist to prevent AI-generated bloat. Future sessions: follow them, and pus
 - **PWA (stage 1.5):** a `manifest.webmanifest` (name, icons, `display: standalone`, theme color) is enough to make it installable on iPhone via Add to Home Screen. Skip a service worker until there is a reason (offline shell is pointless when playback needs network anyway). If added later, hand-write a minimal one rather than pulling in `vite-plugin-pwa`.
 - The YouTube embed **does not work from `file://`** (error 153, missing referrer). Always use `make run` / `make preview`, never open `dist/index.html` directly.
 
+### 4.7 Themes
+- Themes are **CSS-only skins**. Each sets the tokens from `styles/tokens.css` under `:root[data-theme="<id>"]` and may add light decoration (gradients, pseudo-elements, inline SVG, a frame around the player). `tokens.css` is the default `tech` theme. Layout lives in `global.css` and must never be theme-specific. Components use only semantic classes and tokens.
+- **Adding a theme:** (1) `src/styles/themes/<id>.css`, (2) add the id to `ThemeId` in `types/theme.ts`, (3) add an entry to `constants/themes.ts`. Theme CSS is auto-imported by `import.meta.glob` in `main.tsx`.
+- The choice is stored in `localStorage` (`loop-list-theme`). A small inline script in `index.html` applies it before first paint; `hooks/useTheme` owns changes after that.
+- Planned themes: tech (default), haunted mansion, retro VHS (chunky TV frame; vibe only, no logos or characters), cozy, airy. `airy` currently exists as a minimal colors-only stand-in. OS light/dark inheritance comes after the first themes. Static decoration only; respect `prefers-reduced-motion` if animation is ever added.
+
 ## 5. Design details (MVP)
 
 ### 5.1 Video ID parsing
@@ -259,3 +265,4 @@ LoopTube.xyz / looptube.io (minimal reference), YouTube On Loop (A/B, speed, loo
 | 2026-10-31 | Makefile is the entry point for setup/run/build/test/lint/deploy/clean. |
 | 2026-10-31 | Hosting on GitHub Pages via Actions; PWA via manifest only, no service worker yet. |
 | 2026-10-31 | Backend (Supabase vs owner's cluster) deferred until after local library. |
+| 2026-10-31 | Themes are CSS-only token skins switched via `data-theme`, stored in localStorage (section 4.7). |
