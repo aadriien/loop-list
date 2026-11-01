@@ -16,7 +16,12 @@ function loadApi() {
   return apiReady;
 }
 
-export function usePlayer(videoId: string, start: number, rate: number) {
+export function usePlayer(
+  videoId: string,
+  start: number,
+  rate: number,
+  loadKey: number,
+) {
   const hostRef = useRef<HTMLDivElement>(null);
   const [player, setPlayer] = useState<YTPlayer | null>(null);
   const [rates, setRates] = useState(DEFAULT_RATES);
@@ -26,6 +31,7 @@ export function usePlayer(videoId: string, start: number, rate: number) {
   const latest = useRef({ videoId, start, rate });
   latest.current = { videoId, start, rate };
   const loadedId = useRef(videoId);
+  const seenKey = useRef(loadKey);
 
   useEffect(() => {
     const host = hostRef.current;
@@ -67,13 +73,20 @@ export function usePlayer(videoId: string, start: number, rate: number) {
     };
   }, []);
 
+  // loadKey changes on every explicit load, so re-loading the same video re-seeks
   useEffect(() => {
-    if (!player || loadedId.current === videoId) return;
-    loadedId.current = videoId;
-    setError(null);
-    setDuration(0);
-    player.loadVideoById({ videoId, startSeconds: latest.current.start });
-  }, [player, videoId]);
+    if (!player) return;
+    if (loadedId.current !== videoId) {
+      loadedId.current = videoId;
+      setError(null);
+      setDuration(0);
+      player.loadVideoById({ videoId, startSeconds: latest.current.start });
+    } else if (seenKey.current !== loadKey) {
+      player.seekTo(latest.current.start, true);
+      player.playVideo();
+    }
+    seenKey.current = loadKey;
+  }, [player, videoId, loadKey]);
 
   useEffect(() => {
     player?.setPlaybackRate(rate);

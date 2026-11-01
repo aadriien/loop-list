@@ -5,6 +5,7 @@ export interface YTPlayer {
   getCurrentTime(): number;
   getDuration(): number;
   getPlayerState(): number;
+  getVideoData(): { title: string };
   getAvailablePlaybackRates(): number[];
   setPlaybackRate(rate: number): void;
   loadVideoById(options: { videoId: string; startSeconds?: number }): void;

@@ -8,14 +8,17 @@ import Transport from "./Transport";
 
 interface Props {
   state: LoopState;
+  loadKey: number;
   onChange: (patch: Partial<LoopState>) => void;
+  onSave: (title: string) => void;
 }
 
-export default function Looper({ state, onChange }: Props) {
+export default function Looper({ state, loadKey, onChange, onSave }: Props) {
   const { hostRef, player, rates, error, playing, duration } = usePlayer(
     state.videoId,
     state.start,
     state.rate,
+    loadKey,
   );
   useLoopEnforcer(player, state);
   const time = useCurrentTime(player);
@@ -86,6 +89,12 @@ export default function Looper({ state, onChange }: Props) {
             />
             Loop
           </label>
+          <button
+            type="button"
+            onClick={() => onSave(player?.getVideoData().title ?? "")}
+          >
+            Save loop
+          </button>
         </div>
       </div>
     </>
