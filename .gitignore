@@ -1,4 +1,6 @@
 node_modules
 dist
+.pb
+.env
 *.tsbuildinfo
 .DS_Store
