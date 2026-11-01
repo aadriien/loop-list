@@ -1,0 +1,89 @@
+:root[data-theme="haunted"] {
+  --bg: #0d0a12;
+  --surface: #1a1220;
+  --text: #e8dcc8;
+  --muted: #a595a8;
+  --accent: #d9a441;
+  --border: #4a3550;
+  --error: #ff7b7b;
+  --radius: 3px;
+  --font-body: Georgia, "Palatino Linotype", Palatino, serif;
+  --font-mono: Georgia, "Palatino Linotype", Palatino, serif;
+  color-scheme: dark;
+}
+
+:root[data-theme="haunted"] body {
+  background:
+    radial-gradient(
+      ellipse at 50% -10%,
+      rgba(217, 164, 65, 0.2),
+      transparent 60%
+    ),
+    radial-gradient(
+      ellipse at 50% 115%,
+      rgba(150, 120, 190, 0.25),
+      transparent 55%
+    ),
+    #0d0a12;
+  background-attachment: fixed;
+}
+
+:root[data-theme="haunted"] body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  width: 180px;
+  height: 180px;
+  pointer-events: none;
+  opacity: 0.4;
+  background:
+    url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='none' stroke='%23cfc6dd' stroke-width='.6'><path d='M0 0L100 0M0 0L97 26M0 0L71 71M0 0L26 97M0 0L0 100'/><path d='M30 0Q22 22 0 30M60 0Q45 45 0 60M90 0Q68 68 0 90'/></svg>")
+    top left / contain no-repeat;
+}
+
+:root[data-theme="haunted"] h1 {
+  color: var(--accent);
+  font-variant: small-caps;
+  letter-spacing: 0.2em;
+  text-shadow: 0 0 12px rgba(217, 164, 65, 0.5);
+}
+
+:root[data-theme="haunted"] h1::after {
+  content: " ❦";
+}
+
+:root[data-theme="haunted"] button {
+  font-variant: small-caps;
+  letter-spacing: 0.06em;
+}
+
+:root[data-theme="haunted"] button:hover:not(:disabled) {
+  box-shadow: 0 0 10px rgba(217, 164, 65, 0.35);
+}
+
+:root[data-theme="haunted"] .player {
+  position: relative;
+  box-sizing: content-box;
+  margin: 6px;
+  border: 14px solid #4a2f18;
+  border-radius: 2px;
+  box-shadow:
+    0 0 0 2px var(--accent),
+    0 0 0 5px #1a0f06,
+    0 0 48px rgba(217, 164, 65, 0.18),
+    0 18px 30px rgba(0, 0, 0, 0.6);
+}
+
+:root[data-theme="haunted"] .player::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  border: 2px solid var(--accent);
+  box-shadow:
+    inset 0 0 0 4px rgba(42, 26, 12, 0.9),
+    inset 0 0 60px rgba(0, 0, 0, 0.55);
+}

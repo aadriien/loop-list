@@ -1,1 +1,1 @@
-export type ThemeId = "tech" | "airy";
+export type ThemeId = "tech" | "haunted" | "vhs" | "airy";
