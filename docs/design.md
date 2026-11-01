@@ -237,7 +237,7 @@ interface Loop {
 
 ### Stage 3: Sync
 
-**Built (first slice):** self-hosted PocketBase on a Disco instance (Raspberry Pi), one container serving the app, the API and the admin UI (`/_/`) at one origin; data in SQLite on the `pb-data` volume. Schema lives in `pb_migrations/` (new files for changes, never edit applied ones; don't change the schema by clicking in the production dashboard). Registration is closed; the single account is created in the admin UI. Client: local-first (`localStorage` stays the working copy); `hooks/useSync.ts` pulls, merges (newest `updatedAt` wins per loop, deletions are `deleted` tombstones; see `lib/mergeLoops.ts`) and pushes, on changes (debounced) and when the tab becomes visible. Email/password sign-in via `hooks/useAuth.ts`. All loops are shared by any signed-in account (no per-user ownership). Not built: community OAuth, sync indicator polish, conflict UI, more than 500 loops (single page fetch), backups.
+**Built (first slice):** self-hosted PocketBase on a Disco instance (Raspberry Pi), one container serving the app, the API and the admin UI (`/_/`) at one origin; data in SQLite on the `pb-data` volume. Schema lives in `pb_migrations/` (new files for changes, never edit applied ones; don't change the schema by clicking in the production dashboard). Registration is closed; accounts are created by hand in the admin UI (no in-app create-account flow, by choice). Client: local-first (`localStorage` stays the working copy); `hooks/useSync.ts` pulls, merges (newest `updatedAt` wins per loop, deletions are `deleted` tombstones; see `lib/mergeLoops.ts`) and pushes, on changes (debounced) and when the tab becomes visible. Email/password sign-in via `hooks/useAuth.ts`. **Ownership:** every loop has an owner (`user` relation, `pb_migrations/2_loops_owner.js`). API rules limit list/view/update/delete to the owner and forbid reassigning it, and `pb_hooks/loops.pb.js` stamps the signed-in user on create so a client can't spoof it. The client never sees the `user` field. The migration assigns existing loops to the account only when exactly one account exists (otherwise assign by hand, or they stay invisible). **Local cache:** signing in, or pressing Sign out, clears the local library cache and the active loop, and sync repopulates from the server, so one account's loops never leak into another's (`hooks/useAuth.ts`). An expired session keeps the cache (`dropSession`) so unsynced edits survive, and the next sign-in clears it. Consequence: loops saved while signed out are discarded at sign-in. Not built: community OAuth, sync indicator polish, conflict UI, more than 500 loops (single page fetch), backups (see below).
 | Option | Pro | Con |
 |---|---|---|
 | Supabase | Auth + Postgres + RLS, little code | External service |
@@ -245,6 +245,14 @@ interface Loop {
 | Export/import JSON | No backend | Manual |
 
 Single user: one list of loops per user. UI never knows which backend is in use.
+
+#### Backups (to revisit on a regular cadence)
+The database is a SQLite file on the `pb-data` volume on the Raspberry Pi (presumably an SD card). The volume survives redeploys, but not a dead disk, a deleted project/volume, or an admin wiping the shared instance. Device `localStorage` copies are a partial safety net, not a backup. Not set up yet; ideas, none verified:
+- **Off-box copies are the point.** A backup kept only on the same volume does not protect against losing the volume.
+- **PocketBase's own backup feature** (dashboard, Settings, Backups) produces a consistent zip of `pb_data`; I believe it can run on a schedule and store locally or in S3-compatible storage. Prefer it over copying the live SQLite file.
+- **Disco cron service.** Disco's docs say scheduled tasks are configured as a cron service in `disco.json` (see its docs for instructions), with a `schedule` in standard cron syntax and hours in UTC, e.g. `0 21 * * *` runs daily at 21:00 UTC. A daily or weekly job could trigger a PocketBase backup or export a zipped copy and ship it somewhere else (email, a bucket, another machine). How a cron service reaches the volume is unconfirmed.
+- **Cheapest fallback:** periodically download a backup by hand from the dashboard.
+- Open questions: where copies go, retention, and a restore drill (a backup you have never restored is untested).
 
 ### Stage 4: Playlists / queue
 Ordered list of saved loops; next/prev; swap the active loop without reloading the page (one player instance).
@@ -271,4 +279,6 @@ LoopTube.xyz / looptube.io (minimal reference), YouTube On Loop (A/B, speed, loo
 | 2026-10-31 | Backend (Supabase vs owner's cluster) deferred until after local library. |
 | 2026-11-01 | Next after MVP: local library (save/list in localStorage), then a tiny backend for cross-device sync; favorites/tags/recents, theme and PWA polish come after. Library UI is a responsive side panel. |
 | 2026-11-01 | Backend is self-hosted PocketBase on a Disco instance, serving app + API from one container; local-first sync with last-write-wins per loop; email/password auth first, community OAuth later. |
+| 2026-11-01 | Accounts are added manually in the PocketBase admin UI; no in-app sign-up. Loops are per-user (owner relation, stamped server-side). Sign-in and sign-out clear the local cache and repopulate from the server. |
+| 2026-11-01 | Backups are not set up yet; revisit regularly as a complement to the Pi (candidate: Disco cron service plus PocketBase backups shipped off-box). |
 | 2026-10-31 | Themes are CSS-only token skins switched via `data-theme`, stored in localStorage (section 4.7). |
