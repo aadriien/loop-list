@@ -1,0 +1,9 @@
+{
+  "version": "1.0",
+  "services": {
+    "web": {
+      "port": 8090,
+      "volumes": [{ "name": "pb-data", "destinationPath": "/pb/pb_data" }]
+    }
+  }
+}
