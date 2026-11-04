@@ -11,6 +11,8 @@ interface Props {
   onRemove: (id: string) => void;
 }
 
+const SHOWN_CATEGORIES = 3;
+
 export default function Library({
   loops,
   activeId,
@@ -58,6 +60,20 @@ export default function Library({
                   {loop.end === null ? "end" : formatTime(loop.end)} ·{" "}
                   {loop.rate}×
                 </span>
+                {loop.categories.length > 0 && (
+                  <span className="tags">
+                    {loop.categories.slice(0, SHOWN_CATEGORIES).map((name) => (
+                      <span key={name} className="tag">
+                        {name}
+                      </span>
+                    ))}
+                    {loop.categories.length > SHOWN_CATEGORIES && (
+                      <span className="tag">
+                        +{loop.categories.length - SHOWN_CATEGORIES}
+                      </span>
+                    )}
+                  </span>
+                )}
               </button>
               <button
                 type="button"

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import CategoryBar from "./components/CategoryBar";
 import Discover from "./components/Discover";
 import Library from "./components/Library";
 import Looper from "./components/Looper";
@@ -11,6 +12,7 @@ import { useLibrary } from "./hooks/useLibrary";
 import { useSync } from "./hooks/useSync";
 import { useTheme } from "./hooks/useTheme";
 import { useUrlState } from "./hooks/useUrlState";
+import { allCategories } from "./lib/categories";
 import { clearRecent } from "./lib/recentSearches";
 import { clearSearchCache } from "./lib/searchCache";
 import type { SavedLoop } from "./types/library";
@@ -22,13 +24,23 @@ export default function App() {
   const { loops, all, setAll, add, update: updateLoop, remove } = useLibrary();
   const [loadKey, setLoadKey] = useState(0);
   const [activeId, setActiveId] = useState<string | null>(null);
+  // Categories picked for a loop that hasn't been saved yet; attached on Save loop
+  const [pending, setPending] = useState<string[]>([]);
   const { token, canSearch, signIn, signOut, dropSession } = useAuth(() => {
     setAll([]);
     setActiveId(null);
+    setPending([]);
     clearSearchCache();
     clearRecent();
   });
   const syncStatus = useSync(token, all, setAll, dropSession);
+
+  const activeLoop = loops.find((loop) => loop.id === activeId);
+  const categories = activeLoop?.categories ?? pending;
+  const setCategories = (next: string[]) =>
+    activeLoop
+      ? updateLoop(activeLoop.id, { categories: next })
+      : setPending(next);
 
   const update = (patch: Partial<LoopState>) =>
     setState((s) => ({ ...s, ...patch }));
@@ -36,6 +48,7 @@ export default function App() {
     setState({ ...DEFAULT_STATE, ...patch });
     setLoadKey((k) => k + 1);
     setActiveId(id);
+    setPending([]);
   };
   const rename = (loop: SavedLoop) => {
     const title = window.prompt("Rename loop", loop.title)?.trim();
@@ -56,33 +69,41 @@ export default function App() {
       <div className="workspace">
         <div className="stage">
           {state.videoId ? (
-            <Looper
-              state={state}
-              loadKey={loadKey}
-              onChange={update}
-              onSave={(title) =>
-                setActiveId(
-                  add({
-                    videoId: state.videoId,
-                    title: title || state.videoId,
-                    categories: [],
-                    start: state.start,
-                    end: state.end,
-                    rate: state.rate,
-                  }),
-                )
-              }
-              onUpdate={
-                activeId
-                  ? () =>
-                      updateLoop(activeId, {
-                        start: state.start,
-                        end: state.end,
-                        rate: state.rate,
-                      })
-                  : undefined
-              }
-            />
+            <>
+              <Looper
+                state={state}
+                loadKey={loadKey}
+                onChange={update}
+                onSave={(title) => {
+                  setActiveId(
+                    add({
+                      videoId: state.videoId,
+                      title: title || state.videoId,
+                      categories: pending,
+                      start: state.start,
+                      end: state.end,
+                      rate: state.rate,
+                    }),
+                  );
+                  setPending([]);
+                }}
+                onUpdate={
+                  activeId
+                    ? () =>
+                        updateLoop(activeId, {
+                          start: state.start,
+                          end: state.end,
+                          rate: state.rate,
+                        })
+                    : undefined
+                }
+              />
+              <CategoryBar
+                selected={categories}
+                known={allCategories(loops)}
+                onChange={setCategories}
+              />
+            </>
           ) : (
             <p className="hint">Paste a YouTube link to start looping.</p>
           )}

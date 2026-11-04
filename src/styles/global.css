@@ -98,6 +98,28 @@ a {
   gap: 8px;
 }
 
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.tag {
+  padding: 0 6px;
+  font-size: 0.7rem;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+}
+
+.category-bar,
+.category-bar form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
 .library .item {
   display: flex;
   flex: 1;
@@ -199,6 +221,10 @@ a {
   min-height: 36px;
   padding: 0 12px;
   font-size: 0.85rem;
+}
+
+.category-bar .chips {
+  align-items: center;
 }
 
 .row,
