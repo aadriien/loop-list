@@ -11,6 +11,7 @@ import { useLibrary } from "./hooks/useLibrary";
 import { useSync } from "./hooks/useSync";
 import { useTheme } from "./hooks/useTheme";
 import { useUrlState } from "./hooks/useUrlState";
+import { clearSearchCache } from "./lib/searchCache";
 import type { SavedLoop } from "./types/library";
 import type { LoopState } from "./types/loop";
 
@@ -23,6 +24,7 @@ export default function App() {
   const { token, canSearch, signIn, signOut, dropSession } = useAuth(() => {
     setAll([]);
     setActiveId(null);
+    clearSearchCache();
   });
   const syncStatus = useSync(token, all, setAll, dropSession);
 

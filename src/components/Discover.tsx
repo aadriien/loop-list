@@ -2,6 +2,7 @@ import { type SubmitEvent, useState } from "react";
 import { DISCOVER_OPEN_KEY } from "../constants/search";
 import { loadFlag, saveFlag } from "../lib/flagStorage";
 import { ApiError, searchVideos } from "../lib/pocketbase";
+import { cacheKey, cachePage, getCachedPage } from "../lib/searchCache";
 import type { SearchResult } from "../types/search";
 
 interface Props {
@@ -29,7 +30,10 @@ export default function Discover({ token, onOpen }: Props) {
     setLoading(true);
     setError("");
     try {
-      const page = await searchVideos(token, q, pageToken);
+      const key = cacheKey(q, pageToken);
+      const cached = getCachedPage(key);
+      const page = cached ?? (await searchVideos(token, q, pageToken));
+      if (!cached) cachePage(key, page);
       setResults((prev) => (pageToken ? [...prev, ...page.items] : page.items));
       setNextPage(page.nextPageToken);
       setQuery(q);
