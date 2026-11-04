@@ -1,33 +1,44 @@
 import { useCallback, useEffect, useState } from "react";
-import { loadToken, saveToken } from "../lib/authStorage";
-import { ApiError, signIn as apiSignIn, refreshToken } from "../lib/pocketbase";
+import { loadSession, saveSession } from "../lib/authStorage";
+import {
+  ApiError,
+  signIn as apiSignIn,
+  refreshSession,
+} from "../lib/pocketbase";
 
 // onSessionChange discards the cached library so one account's loops never leak into another's
 export function useAuth(onSessionChange: () => void) {
-  const [token, setToken] = useState(loadToken);
+  const [session, setSession] = useState(loadSession);
 
-  useEffect(() => saveToken(token), [token]);
+  useEffect(() => saveSession(session), [session]);
 
-  // Extends the session on each visit; only a real rejection signs you out, not being offline
+  // Extends the session on each visit (and refreshes canSearch); only a real rejection
+  // signs you out, not being offline
   useEffect(() => {
-    const saved = loadToken();
+    const saved = loadSession();
     if (!saved) return;
-    refreshToken(saved).then(setToken, (e) => {
-      if (e instanceof ApiError && e.status < 500) setToken(null);
+    refreshSession(saved.token).then(setSession, (e) => {
+      if (e instanceof ApiError && e.status < 500) setSession(null);
     });
   }, []);
 
   const signIn = async (email: string, password: string) => {
     const next = await apiSignIn(email, password);
     onSessionChange();
-    setToken(next);
+    setSession(next);
   };
   const signOut = () => {
     onSessionChange();
-    setToken(null);
+    setSession(null);
   };
   // An expired session keeps the cache so unsynced edits survive; the next sign-in resets it
-  const dropSession = useCallback(() => setToken(null), []);
+  const dropSession = useCallback(() => setSession(null), []);
 
-  return { token, signIn, signOut, dropSession };
+  return {
+    token: session?.token ?? null,
+    canSearch: session?.canSearch ?? false,
+    signIn,
+    signOut,
+    dropSession,
+  };
 }

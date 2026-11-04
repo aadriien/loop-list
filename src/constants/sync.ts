@@ -1,4 +1,4 @@
-export const API_BASE = "/api/collections";
+export const API_BASE = "/api";
 
 export const AUTH_STORAGE_KEY = "loop-list-auth";
 

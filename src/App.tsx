@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Discover from "./components/Discover";
 import Library from "./components/Library";
 import Looper from "./components/Looper";
 import SyncPanel from "./components/SyncPanel";
@@ -19,7 +20,7 @@ export default function App() {
   const { loops, all, setAll, add, update: updateLoop, remove } = useLibrary();
   const [loadKey, setLoadKey] = useState(0);
   const [activeId, setActiveId] = useState<string | null>(null);
-  const { token, signIn, signOut, dropSession } = useAuth(() => {
+  const { token, canSearch, signIn, signOut, dropSession } = useAuth(() => {
     setAll([]);
     setActiveId(null);
   });
@@ -80,6 +81,15 @@ export default function App() {
           )}
         </div>
         <div className="side">
+          {token && canSearch && (
+            <Discover
+              token={token}
+              onOpen={(videoId) => {
+                load({ videoId });
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }}
+            />
+          )}
           <Library
             loops={loops}
             activeId={activeId}

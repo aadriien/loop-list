@@ -1,9 +1,14 @@
 import { API_BASE } from "../constants/sync";
+import type { Session } from "../types/auth";
 import type { SavedLoop } from "../types/library";
+import type { SearchPage } from "../types/search";
 
 export class ApiError extends Error {
-  constructor(public status: number) {
-    super(`HTTP ${status}`);
+  constructor(
+    public status: number,
+    message = `HTTP ${status}`,
+  ) {
+    super(message);
   }
 }
 
@@ -18,29 +23,41 @@ async function request(path: string, token: string | null, init?: RequestInit) {
       ...(token && { Authorization: token }),
     },
   });
-  if (!res.ok) throw new ApiError(res.status);
+  if (!res.ok) {
+    const body = await res.json().catch(() => null);
+    throw new ApiError(res.status, body?.message);
+  }
   return res.json();
 }
 
 const post = (body: object) => ({ method: "POST", body: JSON.stringify(body) });
 
+const toSession = (data: {
+  token: string;
+  record: { canSearch?: boolean };
+}): Session => ({
+  token: data.token,
+  canSearch: Boolean(data.record.canSearch),
+});
+
 export async function signIn(email: string, password: string) {
   const data = await request(
-    "/users/auth-with-password",
+    "/collections/users/auth-with-password",
     null,
     post({ identity: email, password }),
   );
-  return data.token as string;
+  return toSession(data);
 }
 
-export async function refreshToken(token: string) {
-  const data = await request("/users/auth-refresh", token, post({}));
-  return data.token as string;
+export async function refreshSession(token: string) {
+  return toSession(
+    await request("/collections/users/auth-refresh", token, post({})),
+  );
 }
 
 // One page of 500 is plenty for a personal library
 export async function fetchLoops(token: string): Promise<SavedLoop[]> {
-  const data = await request("/loops/records?perPage=500", token);
+  const data = await request("/collections/loops/records?perPage=500", token);
   return data.items.map((r: RemoteLoop) => ({
     id: r.id,
     videoId: r.videoId,
@@ -61,9 +78,19 @@ export function pushLoop(token: string, loop: SavedLoop, exists: boolean) {
     deleted: loop.deleted ?? false,
   };
   return exists
-    ? request(`/loops/records/${id}`, token, {
+    ? request(`/collections/loops/records/${id}`, token, {
         method: "PATCH",
         body: JSON.stringify(body),
       })
-    : request("/loops/records", token, post({ id, ...body }));
+    : request("/collections/loops/records", token, post({ id, ...body }));
+}
+
+export function searchVideos(
+  token: string,
+  q: string,
+  pageToken = "",
+): Promise<SearchPage> {
+  const params = new URLSearchParams({ q });
+  if (pageToken) params.set("pageToken", pageToken);
+  return request(`/yt/search?${params}`, token);
 }
