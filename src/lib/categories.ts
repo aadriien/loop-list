@@ -37,3 +37,13 @@ export function withCategory(list: string[], name: string, known: string[]) {
 
 export const withoutCategory = (list: string[], name: string) =>
   list.filter((item) => !same(item, name));
+
+// Both take the loops being shown (deleted ones already left out)
+export const inCategory = (loops: SavedLoop[], name: string) =>
+  loops.filter((loop) => hasCategory(loop.categories, name));
+
+export const categoryCounts = (loops: SavedLoop[]) =>
+  allCategories(loops).map((name) => ({
+    name,
+    count: inCategory(loops, name).length,
+  }));

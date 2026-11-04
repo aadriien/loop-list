@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { categoryCounts, hasCategory, inCategory } from "../lib/categories";
 import { filterLoops } from "../lib/filterLoops";
 import { formatTime } from "../lib/time";
 import type { SavedLoop } from "../types/library";
@@ -21,7 +22,16 @@ export default function Library({
   onRemove,
 }: Props) {
   const [query, setQuery] = useState("");
-  const visible = filterLoops(loops, query);
+  const [category, setCategory] = useState<string | null>(null);
+  const counts = categoryCounts(loops);
+  // A chosen category that no longer exists (its last loop lost it) falls back to All
+  const chosen = category
+    ? counts.find(({ name }) => hasCategory([name], category))
+    : undefined;
+  const visible = filterLoops(
+    chosen ? inCategory(loops, chosen.name) : loops,
+    query,
+  );
   const count =
     visible.length === loops.length
       ? `${loops.length}`
@@ -42,11 +52,37 @@ export default function Library({
           aria-label="Search saved loops"
         />
       )}
+      {counts.length > 0 && (
+        <ul className="chips" aria-label="Filter by category">
+          <li>
+            <button
+              type="button"
+              className="chip"
+              aria-pressed={!chosen}
+              onClick={() => setCategory(null)}
+            >
+              All {loops.length}
+            </button>
+          </li>
+          {counts.map(({ name, count: size }) => (
+            <li key={name}>
+              <button
+                type="button"
+                className="chip"
+                aria-pressed={chosen?.name === name}
+                onClick={() => setCategory(name)}
+              >
+                {name} {size}
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
       {loops.length > 0 && visible.length === 0 && (
-        <p className="hint">No saved loops match your search.</p>
+        <p className="hint">No saved loops match.</p>
       )}
       {visible.length > 0 && (
-        <ul>
+        <ul className="loops">
           {visible.map((loop) => (
             <li key={loop.id} className={loop.id === activeId ? "active" : ""}>
               <button

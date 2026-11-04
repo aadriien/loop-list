@@ -5,7 +5,9 @@ import {
 } from "../src/constants/categories";
 import {
   allCategories,
+  categoryCounts,
   hasCategory,
+  inCategory,
   normalizeCategory,
   uniqueNames,
   withCategory,
@@ -83,6 +85,32 @@ describe("withCategory", () => {
       (_, i) => `c${i}`,
     );
     expect(withCategory(full, "one more", [])).toEqual(full);
+  });
+});
+
+describe("inCategory / categoryCounts", () => {
+  const loops = [
+    loop(["Guitar", "Warmups"]),
+    loop(["guitar"]),
+    loop([]),
+    loop(["Ear training"]),
+  ];
+
+  it("keeps only loops in the category, ignoring case", () => {
+    expect(inCategory(loops, "GUITAR")).toHaveLength(2);
+    expect(inCategory(loops, "Bass")).toEqual([]);
+  });
+
+  it("counts loops per category, alphabetically, merging spellings", () => {
+    expect(categoryCounts(loops)).toEqual([
+      { name: "Ear training", count: 1 },
+      { name: "Guitar", count: 2 },
+      { name: "Warmups", count: 1 },
+    ]);
+  });
+
+  it("has no categories when no loop has one", () => {
+    expect(categoryCounts([loop([])])).toEqual([]);
   });
 });
 

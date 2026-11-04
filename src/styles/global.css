@@ -82,7 +82,7 @@ a {
   font-size: 1rem;
 }
 
-.library ul {
+.library .loops {
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -93,7 +93,7 @@ a {
   list-style: none;
 }
 
-.library li {
+.library .loops li {
   display: flex;
   gap: 8px;
 }
@@ -223,8 +223,19 @@ a {
   font-size: 0.85rem;
 }
 
+.chip[aria-pressed="true"] {
+  background: color-mix(in srgb, var(--accent) 18%, var(--surface));
+  border-color: var(--accent);
+}
+
 .category-bar .chips {
   align-items: center;
+}
+
+.library .chips {
+  max-height: 7.5rem;
+  margin-bottom: 10px;
+  overflow-y: auto;
 }
 
 .row,
