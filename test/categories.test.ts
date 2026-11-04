@@ -11,7 +11,9 @@ import {
   inCategory,
   isCategoryFilter,
   normalizeCategory,
+  renamedCategories,
   resolveFilter,
+  resolveRename,
   uncategorizedLoops,
   uniqueNames,
   withCategory,
@@ -153,6 +155,50 @@ describe("category filter", () => {
     ).toBe(true);
     expect(isCategoryFilter({ type: "uncategorized" }, "Guitar")).toBe(false);
     expect(isCategoryFilter(null, "Guitar")).toBe(false);
+  });
+});
+
+describe("renamedCategories", () => {
+  it("replaces the name in place, ignoring case", () => {
+    expect(renamedCategories(["A", "Guitar", "B"], "guitar", "Bass")).toEqual([
+      "A",
+      "Bass",
+      "B",
+    ]);
+  });
+
+  it("merges when the loop already has the new name", () => {
+    expect(renamedCategories(["Guitar", "Bass"], "Guitar", "bass")).toEqual([
+      "Bass",
+    ]);
+  });
+
+  it("returns the same list when the loop does not have the category", () => {
+    const list = ["Bass"];
+    expect(renamedCategories(list, "Guitar", "Strings")).toBe(list);
+  });
+});
+
+describe("resolveRename", () => {
+  const known = ["Bass", "Guitar"];
+
+  it("cleans the new name", () => {
+    expect(resolveRename("Guitar", "  Slow   practice ", known)).toBe(
+      "Slow practice",
+    );
+  });
+
+  it("does nothing for a blank or unchanged name", () => {
+    expect(resolveRename("Guitar", "   ", known)).toBeNull();
+    expect(resolveRename("Guitar", "Guitar", known)).toBeNull();
+  });
+
+  it("allows changing only the capitalization", () => {
+    expect(resolveRename("guitar", "Guitar", ["guitar"])).toBe("Guitar");
+  });
+
+  it("reuses the spelling of another existing category, so the two merge", () => {
+    expect(resolveRename("Guitar", "bass", known)).toBe("Bass");
   });
 });
 

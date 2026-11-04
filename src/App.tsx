@@ -12,7 +12,7 @@ import { useLibrary } from "./hooks/useLibrary";
 import { useSync } from "./hooks/useSync";
 import { useTheme } from "./hooks/useTheme";
 import { useUrlState } from "./hooks/useUrlState";
-import { allCategories } from "./lib/categories";
+import { allCategories, renamedCategories } from "./lib/categories";
 import { clearRecent } from "./lib/recentSearches";
 import { clearSearchCache } from "./lib/searchCache";
 import type { SavedLoop } from "./types/library";
@@ -49,6 +49,13 @@ export default function App() {
     setLoadKey((k) => k + 1);
     setActiveId(id);
     setPending([]);
+  };
+  const renameCategory = (from: string, to: string) => {
+    for (const loop of loops) {
+      const next = renamedCategories(loop.categories, from, to);
+      if (next !== loop.categories) updateLoop(loop.id, { categories: next });
+    }
+    setPending((list) => renamedCategories(list, from, to));
   };
   const rename = (loop: SavedLoop) => {
     const title = window.prompt("Rename loop", loop.title)?.trim();
@@ -125,6 +132,7 @@ export default function App() {
               load({ videoId, start, end, rate }, id)
             }
             onRename={rename}
+            onRenameCategory={renameCategory}
             onRemove={(id) => {
               remove(id);
               if (id === activeId) setActiveId(null);

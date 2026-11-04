@@ -38,6 +38,25 @@ export function withCategory(list: string[], name: string, known: string[]) {
 export const withoutCategory = (list: string[], name: string) =>
   list.filter((item) => !same(item, name));
 
+// One loop's list after renaming a category; if the loop already has the new name the two merge
+export function renamedCategories(list: string[], from: string, to: string) {
+  if (!hasCategory(list, from)) return list;
+  const rest = withoutCategory(list, from);
+  return hasCategory(rest, to)
+    ? rest
+    : list.map((item) => (same(item, from) ? to : item));
+}
+
+// The name a rename should end up with, or null when nothing would change. An existing
+// category's spelling wins (renaming into it merges); changing only the case is allowed.
+export function resolveRename(from: string, input: string, known: string[]) {
+  const clean = normalizeCategory(input);
+  if (!clean || clean === from) return null;
+  return same(clean, from)
+    ? clean
+    : (known.find((k) => same(k, clean)) ?? clean);
+}
+
 // Both take the loops being shown (deleted ones already left out)
 export const inCategory = (loops: SavedLoop[], name: string) =>
   loops.filter((loop) => hasCategory(loop.categories, name));
