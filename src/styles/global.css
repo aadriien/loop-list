@@ -277,6 +277,11 @@ form input {
   flex: none;
 }
 
+.library input {
+  width: 100%;
+  margin-bottom: 8px;
+}
+
 input.time {
   width: 14ch;
   font-family: var(--font-mono);
