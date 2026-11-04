@@ -2,6 +2,7 @@ import { type SubmitEvent, useState } from "react";
 import { DISCOVER_OPEN_KEY } from "../constants/search";
 import { loadFlag, saveFlag } from "../lib/flagStorage";
 import { ApiError, searchVideos } from "../lib/pocketbase";
+import { addRecent, loadRecent, saveRecent } from "../lib/recentSearches";
 import { cacheKey, cachePage, getCachedPage } from "../lib/searchCache";
 import type { SearchResult } from "../types/search";
 
@@ -20,6 +21,8 @@ export default function Discover({ token, onOpen }: Props) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [selected, setSelected] = useState<string | null>(null);
+  const [text, setText] = useState("");
+  const [recent, setRecent] = useState(loadRecent);
 
   const toggle = () => {
     saveFlag(DISCOVER_OPEN_KEY, !open);
@@ -37,6 +40,11 @@ export default function Discover({ token, onOpen }: Props) {
       setResults((prev) => (pageToken ? [...prev, ...page.items] : page.items));
       setNextPage(page.nextPageToken);
       setQuery(q);
+      if (!pageToken) {
+        const next = addRecent(recent, q);
+        setRecent(next);
+        saveRecent(next);
+      }
     } catch (e) {
       setError(e instanceof ApiError ? e.message : "Couldn't reach the server");
     } finally {
@@ -46,7 +54,7 @@ export default function Discover({ token, onOpen }: Props) {
 
   function submit(e: SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
-    const q = String(new FormData(e.currentTarget).get("q")).trim();
+    const q = text.trim();
     if (q) search(q);
   }
 
@@ -58,11 +66,34 @@ export default function Discover({ token, onOpen }: Props) {
       {open && (
         <>
           <form className="row" onSubmit={submit}>
-            <input name="q" placeholder="Search YouTube" aria-label="Search" />
+            <input
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              placeholder="Search YouTube"
+              aria-label="Search"
+            />
             <button type="submit" disabled={loading}>
               Search
             </button>
           </form>
+          {recent.length > 0 && (
+            <ul className="chips" aria-label="Recent searches">
+              {recent.map((q) => (
+                <li key={q}>
+                  <button
+                    type="button"
+                    className="chip"
+                    onClick={() => {
+                      setText(q);
+                      search(q);
+                    }}
+                  >
+                    {q}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
           {error && <p className="error">{error}</p>}
           {results.length > 0 && (
             <ul className="results">

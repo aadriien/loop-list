@@ -186,6 +186,21 @@ a {
   color: var(--muted);
 }
 
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.chip {
+  min-height: 36px;
+  padding: 0 12px;
+  font-size: 0.85rem;
+}
+
 .row,
 .times,
 .controls,

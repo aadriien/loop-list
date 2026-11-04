@@ -11,6 +11,7 @@ import { useLibrary } from "./hooks/useLibrary";
 import { useSync } from "./hooks/useSync";
 import { useTheme } from "./hooks/useTheme";
 import { useUrlState } from "./hooks/useUrlState";
+import { clearRecent } from "./lib/recentSearches";
 import { clearSearchCache } from "./lib/searchCache";
 import type { SavedLoop } from "./types/library";
 import type { LoopState } from "./types/loop";
@@ -25,6 +26,7 @@ export default function App() {
     setAll([]);
     setActiveId(null);
     clearSearchCache();
+    clearRecent();
   });
   const syncStatus = useSync(token, all, setAll, dropSession);
 
