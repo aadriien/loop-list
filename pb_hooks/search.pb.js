@@ -3,6 +3,10 @@ routerAdd(
   "GET",
   "/api/yt/search",
   (e) => {
+    if (!e.auth.getBool("canSearch")) {
+      throw new ForbiddenError("Search is not enabled for this account");
+    }
+
     const key = $os.getenv("YT_API_KEY");
     if (!key) throw new InternalServerError("YT_API_KEY is not set");
 
