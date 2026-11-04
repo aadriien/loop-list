@@ -261,6 +261,10 @@ The database is a SQLite file on the `pb-data` volume on the Raspberry Pi (presu
 - **Cheapest fallback:** periodically download a backup by hand from the dashboard.
 - Open questions: where copies go, retention, and a restore drill (a backup you have never restored is untested).
 
+### Discover (video search)
+**Built so far (backend only):** `pb_hooks/search.pb.js` adds `GET /api/yt/search?q=...&pageToken=...`, which calls the YouTube Data API v3 `search.list` with `type=video`, `videoEmbeddable=true` and `videoSyndicated=true`, and returns `{ items: [{ videoId, title, channel }], nextPageToken }` (titles HTML-decoded; thumbnails can be derived from the video id). It requires a signed-in user, reads the key from the `YT_API_KEY` environment variable (gitignored `.env` locally, passed to PocketBase by the Makefile; a Disco environment variable in production), and maps failures to 429 (daily quota), 502 (upstream) and 500 (key missing). The IFrame Player API cannot search (Google removed its search playlist option in 2020), so the Data API is the only supported route. Quota is small (the docs describe roughly 100 searches per day; check the Cloud console), so search only on submit, cache, and show a clear message when it runs out. The key should be restricted to the YouTube Data API v3 only; HTTP-referrer restrictions would break server-side calls.
+**Planned (not built):** a collapsible Discover section with a search bar and results; per result Preview, Save (adds to the library with the whole video as the range, no need to play it first), and Open in looper. Open choices: where it lives (main column vs side tab), preview via a plain iframe vs a second API-controlled player, and whether to limit to music.
+
 ### Stage 4: Playlists / queue
 Ordered list of saved loops; next/prev; swap the active loop without reloading the page (one player instance).
 

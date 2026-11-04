@@ -8,8 +8,10 @@ PB_DIR := .pb
 PB := $(PB_DIR)/pocketbase
 PB_FLAGS := --dir=$(PB_DIR)/data --migrationsDir=pb_migrations --hooksDir=pb_hooks
 
-# Throwaway login for the local PocketBase admin: PB_DEV_ADMIN and PB_DEV_PASSWORD (see .env.example)
+# Local settings from .env (see .env.example): the throwaway PB_DEV_ADMIN / PB_DEV_PASSWORD login,
+# and YT_API_KEY, which is passed through to PocketBase for the search route
 -include .env
+export YT_API_KEY
 
 setup:
 	npm install
