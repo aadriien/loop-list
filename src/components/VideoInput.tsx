@@ -1,13 +1,15 @@
 import { type SubmitEvent, useState } from "react";
-import { parseVideoInput } from "../lib/parseVideoInput";
+import { parseVideoInput, watchUrl } from "../lib/parseVideoInput";
 import type { ParsedVideo } from "../types/loop";
 
-export default function VideoInput({
-  onLoad,
-}: {
+interface Props {
+  videoId: string;
   onLoad: (video: ParsedVideo) => void;
-}) {
-  const [text, setText] = useState("");
+}
+
+// App keys this by videoId, so the box restarts from the loaded video's link whenever it changes
+export default function VideoInput({ videoId, onLoad }: Props) {
+  const [text, setText] = useState(() => (videoId ? watchUrl(videoId) : ""));
   const [invalid, setInvalid] = useState(false);
 
   function submit(e: SubmitEvent) {

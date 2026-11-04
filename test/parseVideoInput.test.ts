@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { parseVideoInput } from "../src/lib/parseVideoInput";
+import { parseVideoInput, watchUrl } from "../src/lib/parseVideoInput";
 
 const ID = "dQw4w9WgXcQ";
 
@@ -16,6 +16,10 @@ describe("parseVideoInput", () => {
     `https://www.youtube.com/live/${ID}`,
   ])("extracts the id from %s", (input) => {
     expect(parseVideoInput(input)?.id).toBe(ID);
+  });
+
+  it("parses the link it builds", () => {
+    expect(parseVideoInput(watchUrl(ID))).toEqual({ id: ID });
   });
 
   it("reads the start time", () => {

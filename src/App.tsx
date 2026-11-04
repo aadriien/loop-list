@@ -49,6 +49,8 @@ export default function App() {
         <ThemePicker theme={theme} onChange={setTheme} />
       </header>
       <VideoInput
+        key={state.videoId}
+        videoId={state.videoId}
         onLoad={({ id, start }) => load({ videoId: id, start: start ?? 0 })}
       />
       <div className="workspace">

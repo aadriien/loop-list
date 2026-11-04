@@ -1,6 +1,7 @@
 import { useCurrentTime } from "../hooks/useCurrentTime";
 import { useLoopEnforcer } from "../hooks/useLoopEnforcer";
 import { usePlayer } from "../hooks/usePlayer";
+import { watchUrl } from "../lib/parseVideoInput";
 import type { LoopState } from "../types/loop";
 import RangeSlider from "./RangeSlider";
 import TimeControl from "./TimeControl";
@@ -37,9 +38,7 @@ export default function Looper({
       {error !== null && (
         <p className="error">
           This video can't be played here (error {error}).{" "}
-          <a href={`https://www.youtube.com/watch?v=${state.videoId}`}>
-            Open on YouTube
-          </a>
+          <a href={watchUrl(state.videoId)}>Open on YouTube</a>
         </p>
       )}
       <RangeSlider

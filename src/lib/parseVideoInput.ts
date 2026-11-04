@@ -4,6 +4,8 @@ import { parseTime } from "./time";
 const VIDEO_ID = /^[A-Za-z0-9_-]{11}$/;
 const ID_PATH_PREFIXES = ["shorts", "embed", "live"];
 
+export const watchUrl = (id: string) => `https://www.youtube.com/watch?v=${id}`;
+
 export function parseVideoInput(text: string): ParsedVideo | null {
   const input = text.trim();
   if (VIDEO_ID.test(input)) return { id: input };
