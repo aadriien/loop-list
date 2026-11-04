@@ -17,7 +17,7 @@ routerAdd(
     // videoEmbeddable and videoSyndicated keep results to videos that can play on other sites
     let url =
       "https://www.googleapis.com/youtube/v3/search?part=snippet&type=video" +
-      "&videoEmbeddable=true&videoSyndicated=true&maxResults=12" +
+      "&videoEmbeddable=true&videoSyndicated=true&maxResults=50" +
       "&q=" +
       encodeURIComponent(q) +
       "&key=" +
