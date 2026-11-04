@@ -12,8 +12,12 @@ export class ApiError extends Error {
   }
 }
 
-// PocketBase can't store null numbers, so a missing end is sent as 0
-type RemoteLoop = Omit<SavedLoop, "end"> & { end: number };
+// PocketBase can't store null numbers, so a missing end is sent as 0; loops saved before
+// categories existed come back with categories null
+type RemoteLoop = Omit<SavedLoop, "end" | "categories"> & {
+  end: number;
+  categories: string[] | null;
+};
 
 async function request(path: string, token: string | null, init?: RequestInit) {
   const res = await fetch(`${API_BASE}${path}`, {
@@ -65,6 +69,7 @@ export async function fetchLoops(token: string): Promise<SavedLoop[]> {
     start: r.start,
     end: r.end || null,
     rate: r.rate,
+    categories: r.categories ?? [],
     updatedAt: r.updatedAt,
     deleted: r.deleted,
   }));

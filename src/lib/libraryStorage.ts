@@ -2,11 +2,12 @@ import { LIBRARY_STORAGE_KEY } from "../constants/library";
 import type { SavedLoop } from "../types/library";
 import { ID_PATTERN, newId } from "./ids";
 
-// Loops saved before sync existed have uuid ids and no updatedAt
+// Loops saved before sync existed have uuid ids and no updatedAt; older ones also lack categories
 const normalize = (loop: SavedLoop): SavedLoop => ({
   ...loop,
   id: ID_PATTERN.test(loop.id) ? loop.id : newId(),
   updatedAt: loop.updatedAt ?? 0,
+  categories: loop.categories ?? [],
 });
 
 export function loadLibrary(): SavedLoop[] {

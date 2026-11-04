@@ -11,6 +11,7 @@ const loop: SavedLoop = {
   start: 12.5,
   end: 48,
   rate: 0.75,
+  categories: ["Guitar"],
   updatedAt: 1700000000000,
 };
 
@@ -42,7 +43,7 @@ describe("libraryStorage", () => {
   });
 
   it("upgrades loops saved before sync existed", () => {
-    const { updatedAt: _, ...legacy } = loop;
+    const { updatedAt: _, categories: __, ...legacy } = loop;
     store.set(
       LIBRARY_STORAGE_KEY,
       JSON.stringify([{ ...legacy, id: crypto.randomUUID() }]),
@@ -50,5 +51,12 @@ describe("libraryStorage", () => {
     const [upgraded] = loadLibrary();
     expect(upgraded.id).toMatch(ID_PATTERN);
     expect(upgraded.updatedAt).toBe(0);
+    expect(upgraded.categories).toEqual([]);
+  });
+
+  it("gives loops saved before categories existed an empty list", () => {
+    const { categories: _, ...older } = loop;
+    store.set(LIBRARY_STORAGE_KEY, JSON.stringify([older]));
+    expect(loadLibrary()).toEqual([{ ...loop, categories: [] }]);
   });
 });

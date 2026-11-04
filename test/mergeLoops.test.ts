@@ -9,6 +9,7 @@ const loop = (id: string, updatedAt: number, title = id): SavedLoop => ({
   start: 0,
   end: null,
   rate: 1,
+  categories: [],
   updatedAt,
 });
 

@@ -65,6 +65,7 @@ export default function App() {
                   add({
                     videoId: state.videoId,
                     title: title || state.videoId,
+                    categories: [],
                     start: state.start,
                     end: state.end,
                     rate: state.rate,

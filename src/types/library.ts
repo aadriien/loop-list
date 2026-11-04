@@ -5,6 +5,7 @@ export interface SavedLoop {
   start: number;
   end: number | null;
   rate: number;
+  categories: string[];
   updatedAt: number;
   deleted?: boolean;
 }
