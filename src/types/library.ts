@@ -9,3 +9,9 @@ export interface SavedLoop {
   updatedAt: number;
   deleted?: boolean;
 }
+
+// What the saved list is narrowed to: nothing, one category, or loops with no category
+export type CategoryFilter =
+  | { type: "category"; name: string }
+  | { type: "uncategorized" }
+  | null;

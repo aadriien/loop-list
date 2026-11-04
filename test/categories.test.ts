@@ -5,10 +5,14 @@ import {
 } from "../src/constants/categories";
 import {
   allCategories,
+  applyCategoryFilter,
   categoryCounts,
   hasCategory,
   inCategory,
+  isCategoryFilter,
   normalizeCategory,
+  resolveFilter,
+  uncategorizedLoops,
   uniqueNames,
   withCategory,
   withoutCategory,
@@ -111,6 +115,44 @@ describe("inCategory / categoryCounts", () => {
 
   it("has no categories when no loop has one", () => {
     expect(categoryCounts([loop([])])).toEqual([]);
+  });
+});
+
+describe("category filter", () => {
+  const loops = [loop(["Guitar"]), loop(["guitar", "Warmups"]), loop([])];
+
+  it("narrows to nothing, a category, or the uncategorized", () => {
+    expect(applyCategoryFilter(loops, null)).toBe(loops);
+    expect(
+      applyCategoryFilter(loops, { type: "category", name: "GUITAR" }),
+    ).toHaveLength(2);
+    expect(applyCategoryFilter(loops, { type: "uncategorized" })).toHaveLength(
+      1,
+    );
+    expect(uncategorizedLoops(loops)).toHaveLength(1);
+  });
+
+  it("drops a category that no longer exists and fixes the spelling of one that does", () => {
+    expect(resolveFilter({ type: "category", name: "bass" }, loops)).toBeNull();
+    expect(resolveFilter({ type: "category", name: "warmups" }, loops)).toEqual(
+      { type: "category", name: "Warmups" },
+    );
+  });
+
+  it("keeps uncategorized only while some loop has no category", () => {
+    expect(resolveFilter({ type: "uncategorized" }, loops)).toEqual({
+      type: "uncategorized",
+    });
+    expect(resolveFilter({ type: "uncategorized" }, [loop(["A"])])).toBeNull();
+    expect(resolveFilter(null, loops)).toBeNull();
+  });
+
+  it("says whether a category is the active filter", () => {
+    expect(
+      isCategoryFilter({ type: "category", name: "Guitar" }, "Guitar"),
+    ).toBe(true);
+    expect(isCategoryFilter({ type: "uncategorized" }, "Guitar")).toBe(false);
+    expect(isCategoryFilter(null, "Guitar")).toBe(false);
   });
 });
 

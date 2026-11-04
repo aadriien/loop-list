@@ -1,7 +1,7 @@
 import { useState } from "react";
 import CategoryBar from "./components/CategoryBar";
 import Discover from "./components/Discover";
-import Library from "./components/Library";
+import LoopBrowser from "./components/LoopBrowser";
 import Looper from "./components/Looper";
 import SyncPanel from "./components/SyncPanel";
 import ThemePicker from "./components/ThemePicker";
@@ -118,7 +118,7 @@ export default function App() {
               }}
             />
           )}
-          <Library
+          <LoopBrowser
             loops={loops}
             activeId={activeId}
             onSelect={({ id, videoId, start, end, rate }) =>

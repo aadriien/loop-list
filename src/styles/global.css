@@ -69,7 +69,8 @@ a {
 
 .library,
 .sync,
-.discover {
+.discover,
+.categories {
   padding: 12px 16px;
   background: var(--surface);
   border: 1px solid var(--border);
@@ -82,7 +83,7 @@ a {
   font-size: 1rem;
 }
 
-.library .loops {
+.rows {
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -93,7 +94,7 @@ a {
   list-style: none;
 }
 
-.library .loops li {
+.rows li {
   display: flex;
   gap: 8px;
 }
@@ -120,7 +121,7 @@ a {
   gap: 8px;
 }
 
-.library .item {
+.rows .item {
   display: flex;
   flex: 1;
   flex-direction: column;
@@ -130,26 +131,27 @@ a {
   text-align: left;
 }
 
-.library .active .item {
+.rows .active .item {
   background: color-mix(in srgb, var(--accent) 18%, var(--surface));
   border-color: var(--accent);
   box-shadow: inset 4px 0 0 var(--accent);
 }
 
-.library .title {
+.rows .title {
   max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.library .meta {
+.rows .meta {
   font-family: var(--font-mono);
   font-size: 0.8rem;
   color: var(--muted);
 }
 
-.discover {
+.discover,
+.categories {
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -211,16 +213,16 @@ a {
 .chips {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: 4px;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
 .chip {
-  min-height: 36px;
-  padding: 0 12px;
-  font-size: 0.85rem;
+  min-height: 28px;
+  padding: 0 8px;
+  font-size: 0.75rem;
 }
 
 .chip[aria-pressed="true"] {
@@ -230,6 +232,12 @@ a {
 
 .category-bar .chips {
   align-items: center;
+}
+
+.category-bar .chip {
+  min-height: 36px;
+  padding: 0 12px;
+  font-size: 0.85rem;
 }
 
 .library .chips {

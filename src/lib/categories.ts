@@ -2,7 +2,7 @@ import {
   CATEGORIES_PER_LOOP_MAX,
   CATEGORY_MAX_LENGTH,
 } from "../constants/categories";
-import type { SavedLoop } from "../types/library";
+import type { CategoryFilter, SavedLoop } from "../types/library";
 
 const same = (a: string, b: string) => a.toLowerCase() === b.toLowerCase();
 
@@ -47,3 +47,36 @@ export const categoryCounts = (loops: SavedLoop[]) =>
     name,
     count: inCategory(loops, name).length,
   }));
+
+export const uncategorizedLoops = (loops: SavedLoop[]) =>
+  loops.filter((loop) => loop.categories.length === 0);
+
+export const isCategoryFilter = (filter: CategoryFilter, name: string) =>
+  filter?.type === "category" && filter.name === name;
+
+export function applyCategoryFilter(
+  loops: SavedLoop[],
+  filter: CategoryFilter,
+) {
+  if (!filter) return loops;
+  return filter.type === "uncategorized"
+    ? uncategorizedLoops(loops)
+    : inCategory(loops, filter.name);
+}
+
+// Drops a filter whose category no longer exists, and uses the category's current spelling
+export function resolveFilter(
+  filter: CategoryFilter,
+  loops: SavedLoop[],
+): CategoryFilter {
+  if (filter?.type === "uncategorized") {
+    return uncategorizedLoops(loops).length > 0 ? filter : null;
+  }
+  if (filter?.type === "category") {
+    const found = categoryCounts(loops).find(({ name }) =>
+      hasCategory([name], filter.name),
+    );
+    return found ? { type: "category", name: found.name } : null;
+  }
+  return null;
+}

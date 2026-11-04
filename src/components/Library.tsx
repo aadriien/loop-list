@@ -1,12 +1,19 @@
 import { useState } from "react";
-import { categoryCounts, hasCategory, inCategory } from "../lib/categories";
+import {
+  applyCategoryFilter,
+  categoryCounts,
+  isCategoryFilter,
+  uncategorizedLoops,
+} from "../lib/categories";
 import { filterLoops } from "../lib/filterLoops";
 import { formatTime } from "../lib/time";
-import type { SavedLoop } from "../types/library";
+import type { CategoryFilter, SavedLoop } from "../types/library";
 
-interface Props {
+export interface LibraryProps {
   loops: SavedLoop[];
   activeId: string | null;
+  filter: CategoryFilter;
+  onFilter: (filter: CategoryFilter) => void;
   onSelect: (loop: SavedLoop) => void;
   onRename: (loop: SavedLoop) => void;
   onRemove: (id: string) => void;
@@ -17,21 +24,16 @@ const SHOWN_CATEGORIES = 3;
 export default function Library({
   loops,
   activeId,
+  filter,
+  onFilter,
   onSelect,
   onRename,
   onRemove,
-}: Props) {
+}: LibraryProps) {
   const [query, setQuery] = useState("");
-  const [category, setCategory] = useState<string | null>(null);
   const counts = categoryCounts(loops);
-  // A chosen category that no longer exists (its last loop lost it) falls back to All
-  const chosen = category
-    ? counts.find(({ name }) => hasCategory([name], category))
-    : undefined;
-  const visible = filterLoops(
-    chosen ? inCategory(loops, chosen.name) : loops,
-    query,
-  );
+  const uncategorized = uncategorizedLoops(loops).length;
+  const visible = filterLoops(applyCategoryFilter(loops, filter), query);
   const count =
     visible.length === loops.length
       ? `${loops.length}`
@@ -58,8 +60,8 @@ export default function Library({
             <button
               type="button"
               className="chip"
-              aria-pressed={!chosen}
-              onClick={() => setCategory(null)}
+              aria-pressed={!filter}
+              onClick={() => onFilter(null)}
             >
               All {loops.length}
             </button>
@@ -69,20 +71,32 @@ export default function Library({
               <button
                 type="button"
                 className="chip"
-                aria-pressed={chosen?.name === name}
-                onClick={() => setCategory(name)}
+                aria-pressed={isCategoryFilter(filter, name)}
+                onClick={() => onFilter({ type: "category", name })}
               >
                 {name} {size}
               </button>
             </li>
           ))}
+          {uncategorized > 0 && (
+            <li>
+              <button
+                type="button"
+                className="chip"
+                aria-pressed={filter?.type === "uncategorized"}
+                onClick={() => onFilter({ type: "uncategorized" })}
+              >
+                Uncategorized {uncategorized}
+              </button>
+            </li>
+          )}
         </ul>
       )}
       {loops.length > 0 && visible.length === 0 && (
         <p className="hint">No saved loops match.</p>
       )}
       {visible.length > 0 && (
-        <ul className="loops">
+        <ul className="rows">
           {visible.map((loop) => (
             <li key={loop.id} className={loop.id === activeId ? "active" : ""}>
               <button
