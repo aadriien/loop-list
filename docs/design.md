@@ -204,6 +204,7 @@ Pass `playsinline: 1`; autoplay needs a user gesture (handle `onAutoplayBlocked`
 | Duration bugs (looptube pain point) | Caused by storing duration in the URL. | Never store it. |
 | IFrame API drift | Occasional changes (public revision log). | Keep surface small, isolated in `usePlayer`. |
 | React ceremony around an imperative player | `useRef`/`useEffect` easy to get subtly wrong (double init in StrictMode, stale closures). | Confine to `usePlayer`/`useLoopEnforcer`; test by hand. |
+| Embeds blocked per hostname | Rights holders (e.g. music publishers) can allow or block embedding by domain via YouTube Content Manager ([help page](https://support.google.com/youtube/answer/6301625)). Seen 2026-11: one video ("blocked it from display on this website") failed on the first custom hostname but played on `localhost`, `github.io`, Disco's default URL, and a different hostname on the same custom domain. It was not headers, referrer, COOP, or embed code (the `Referer` was correct, looptube uses the same plain `YT.Player` call). | If an embed is blocked on the deployed site but plays on `youtube.com`, try another hostname before debugging code. No code fix exists. |
 | AI code bloat | Biggest long-term risk to this repo. | Conventions in 4.5, small-file rule, reuse-first, `make check` gate. |
 
 ## 7. Background playback (stage 5, not MVP)
