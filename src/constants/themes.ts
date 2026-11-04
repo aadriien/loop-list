@@ -9,6 +9,8 @@ export const THEMES: { id: ThemeId; label: string }[] = [
   { id: "neon", label: "Neon City" },
   { id: "space", label: "Space Opera" },
   { id: "jungle", label: "Jungle Safari" },
+  { id: "console", label: "Retro Console" },
+  { id: "win95", label: "Early Windows" },
   { id: "airy", label: "Airy" },
 ];
 

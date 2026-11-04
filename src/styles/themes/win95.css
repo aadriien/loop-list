@@ -1,0 +1,211 @@
+:root[data-theme="win95"] {
+  --bg: #008080;
+  --surface: #c0c0c0;
+  --text: #000;
+  --muted: #404040;
+  --accent: #000080;
+  --border: #808080;
+  --error: #c00000;
+  --radius: 0;
+  --font-body: Tahoma, "MS Sans Serif", Verdana, Geneva, sans-serif;
+  --font-mono: "Courier New", Courier, monospace;
+  --bevel-out:
+    inset -1px -1px #0a0a0a, inset 1px 1px #fff, inset -2px -2px #808080,
+    inset 2px 2px #dfdfdf;
+  --bevel-in:
+    inset 1px 1px #0a0a0a, inset -1px -1px #fff, inset 2px 2px #808080,
+    inset -2px -2px #dfdfdf;
+  --title-bar: linear-gradient(90deg, #000080, #1084d0);
+  color-scheme: light;
+}
+
+:root[data-theme="win95"] body {
+  font-size: 0.9rem;
+}
+
+:root[data-theme="win95"] h1 {
+  color: #fff;
+  text-shadow: 1px 1px #000;
+}
+
+:root[data-theme="win95"] h1::before {
+  content: "▣ ";
+}
+
+:root[data-theme="win95"] main {
+  padding-bottom: 46px;
+}
+
+:root[data-theme="win95"] body::before {
+  content: "";
+  position: fixed;
+  top: 90px;
+  left: 12px;
+  z-index: -1;
+  width: 80px;
+  height: 270px;
+  pointer-events: none;
+  background:
+    url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 270' font-family='Tahoma,Verdana,sans-serif' font-size='11' text-anchor='middle'><rect x='14' y='6' width='52' height='38' fill='%23c0c0c0' stroke='%23000'/><rect x='19' y='11' width='42' height='28' fill='%2300a0a0'/><rect x='30' y='46' width='20' height='5' fill='%23c0c0c0' stroke='%23000'/><rect x='20' y='51' width='40' height='6' fill='%23c0c0c0' stroke='%23000'/><text x='40' y='74' fill='%23fff'>My Loops</text><path d='M14 108h22l6 6h24v32H14z' fill='%23ffd34d' stroke='%23000'/><text x='40' y='164' fill='%23fff'>Music</text><rect x='22' y='196' width='36' height='5' fill='%23c0c0c0' stroke='%23000'/><path d='M25 201h30l-3 38H28z' fill='%23c0c0c0' stroke='%23000'/><path d='M34 207v26M40 207v26M46 207v26' stroke='%23808080'/><text x='40' y='256' fill='%23fff'>Recycle Bin</text></svg>")
+    0 0 / contain no-repeat;
+}
+
+:root[data-theme="win95"] body::after {
+  content: "";
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: -1;
+  height: 30px;
+  pointer-events: none;
+  background:
+    url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='66' height='24' viewBox='0 0 66 24'><rect x='.5' y='.5' width='65' height='23' fill='%23c0c0c0' stroke='%23000'/><rect x='1.5' y='1.5' width='63' height='21' fill='none' stroke='%23fff'/><text x='33' y='16' font-family='Tahoma,Verdana,sans-serif' font-size='12' font-weight='bold' text-anchor='middle'>Start</text></svg>")
+    4px center no-repeat,
+    url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='74' height='22' viewBox='0 0 74 22'><rect x='.5' y='.5' width='73' height='21' fill='none' stroke='%23808080'/><text x='37' y='15' font-family='Tahoma,Verdana,sans-serif' font-size='11' text-anchor='middle'>12:00 PM</text></svg>")
+    calc(100% - 4px) center no-repeat,
+    var(--surface);
+  box-shadow:
+    inset 0 2px #dfdfdf,
+    inset 0 1px #fff;
+}
+
+:root[data-theme="win95"] .stage::after {
+  content: "_ □ ×";
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  padding: 0 6px;
+  font-size: 0.75rem;
+  line-height: 16px;
+  letter-spacing: 0.3em;
+  color: #000;
+  background: var(--surface);
+  box-shadow: var(--bevel-out);
+}
+
+:root[data-theme="win95"] .library,
+:root[data-theme="win95"] .sync,
+:root[data-theme="win95"] .discover,
+:root[data-theme="win95"] .categories,
+:root[data-theme="win95"] .stage {
+  border: none;
+  border-radius: 0;
+  box-shadow: var(--bevel-out);
+}
+
+:root[data-theme="win95"] .stage {
+  position: relative;
+  padding: 34px 12px 12px;
+  background: var(--surface);
+}
+
+:root[data-theme="win95"] .stage::before {
+  content: "loop-list";
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  left: 3px;
+  height: 20px;
+  padding: 2px 6px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #fff;
+  background: var(--title-bar);
+}
+
+:root[data-theme="win95"] .library h2,
+:root[data-theme="win95"] .sync h2 {
+  margin: -12px -16px 10px;
+  padding: 3px 8px;
+  font-size: 0.85rem;
+  color: #fff;
+  background: var(--title-bar);
+}
+
+:root[data-theme="win95"] .discover > button:first-child,
+:root[data-theme="win95"] .categories > button:first-child {
+  min-height: 0;
+  margin: -12px -16px 0;
+  padding: 3px 8px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #fff;
+  text-align: left;
+  background: var(--title-bar);
+  box-shadow: none;
+}
+
+:root[data-theme="win95"] input:not([type="checkbox"], [type="range"]),
+:root[data-theme="win95"] select {
+  background: #fff;
+  border: none;
+  box-shadow: var(--bevel-in);
+}
+
+:root[data-theme="win95"] button {
+  color: #000;
+  background: var(--surface);
+  border: none;
+  box-shadow: var(--bevel-out);
+}
+
+:root[data-theme="win95"] button:active:not(:disabled) {
+  box-shadow: var(--bevel-in);
+}
+
+:root[data-theme="win95"] .rows {
+  gap: 0;
+  padding: 2px;
+  background: #fff;
+  box-shadow: var(--bevel-in);
+}
+
+:root[data-theme="win95"] .item,
+:root[data-theme="win95"] .result {
+  background: transparent;
+  box-shadow: none;
+}
+
+:root[data-theme="win95"] .rows .active .item,
+:root[data-theme="win95"] .result.active {
+  color: #fff;
+  background: var(--accent);
+}
+
+:root[data-theme="win95"] .rows .active .meta {
+  color: #dcdcff;
+}
+
+:root[data-theme="win95"] .chip[aria-pressed="true"] {
+  font-weight: 700;
+  background: #dfdfdf;
+  box-shadow: var(--bevel-in);
+}
+
+:root[data-theme="win95"] .range-track {
+  background: #fff;
+  border-radius: 0;
+  box-shadow: var(--bevel-in);
+}
+
+:root[data-theme="win95"] .range input:not(.seek)::-webkit-slider-thumb {
+  background: var(--surface);
+  border: none;
+  border-radius: 0;
+  box-shadow: var(--bevel-out);
+}
+
+:root[data-theme="win95"] .range input:not(.seek)::-moz-range-thumb {
+  background: var(--surface);
+  border: none;
+  border-radius: 0;
+  box-shadow: var(--bevel-out);
+}
+
+:root[data-theme="win95"] .player {
+  box-sizing: content-box;
+  border: 3px solid;
+  border-color: #808080 #fff #fff #808080;
+  border-radius: 0;
+}

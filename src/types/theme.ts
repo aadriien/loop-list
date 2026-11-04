@@ -7,4 +7,6 @@ export type ThemeId =
   | "neon"
   | "space"
   | "jungle"
+  | "console"
+  | "win95"
   | "airy";
