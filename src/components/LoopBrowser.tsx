@@ -6,11 +6,16 @@ import Library, { type LibraryProps } from "./Library";
 
 type Props = Omit<LibraryProps, "filter" | "onFilter"> & {
   onRenameCategory: (from: string, to: string) => void;
+  onRemoveCategory: (name: string) => void;
 };
 
 // Owns the category filter shared by the Categories panel and the saved list, so the app
 // above only passes in the loops and what to do with them
-export default function LoopBrowser({ onRenameCategory, ...library }: Props) {
+export default function LoopBrowser({
+  onRenameCategory,
+  onRemoveCategory,
+  ...library
+}: Props) {
   const [filter, setFilter] = useState<CategoryFilter>(null);
   const current = resolveFilter(filter, library.loops);
   // A filter whose category has disappeared is dropped for good, not just hidden
@@ -23,6 +28,7 @@ export default function LoopBrowser({ onRenameCategory, ...library }: Props) {
         filter={current}
         onFilter={setFilter}
         onRename={onRenameCategory}
+        onRemove={onRemoveCategory}
       />
       <Library {...library} filter={current} onFilter={setFilter} />
     </>

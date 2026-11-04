@@ -209,6 +209,11 @@ describe("withoutCategory / hasCategory", () => {
     ]);
   });
 
+  it("returns the same list when the category is not in it", () => {
+    const list = ["Guitar"];
+    expect(withoutCategory(list, "Bass")).toBe(list);
+  });
+
   it("reports membership ignoring case", () => {
     expect(hasCategory(["Guitar"], "guitar")).toBe(true);
     expect(hasCategory(["Guitar"], "Bass")).toBe(false);

@@ -14,6 +14,7 @@ interface Props {
   filter: CategoryFilter;
   onFilter: (filter: CategoryFilter) => void;
   onRename: (from: string, to: string) => void;
+  onRemove: (name: string) => void;
 }
 
 const loopCount = (n: number) => `${n} ${n === 1 ? "loop" : "loops"}`;
@@ -53,6 +54,7 @@ export default function CategoriesPanel({
   filter,
   onFilter,
   onRename,
+  onRemove,
 }: Props) {
   const counts = categoryCounts(loops);
   const uncategorized = uncategorizedLoops(loops).length;
@@ -74,6 +76,11 @@ export default function CategoriesPanel({
     // Keep the filter on the category if it was the one selected
     if (isCategoryFilter(filter, name))
       onFilter({ type: "category", name: next });
+  }
+
+  function remove(name: string, count: number) {
+    const message = `Delete the category "${name}"? It will be removed from ${loopCount(count)}. The loops themselves stay.`;
+    if (window.confirm(message)) onRemove(name);
   }
 
   return (
@@ -105,6 +112,13 @@ export default function CategoriesPanel({
                   onClick={() => rename(name)}
                 >
                   ✎
+                </button>
+                <button
+                  type="button"
+                  aria-label={`Delete ${name}`}
+                  onClick={() => remove(name, count)}
+                >
+                  ✕
                 </button>
               </Row>
             );

@@ -12,7 +12,11 @@ import { useLibrary } from "./hooks/useLibrary";
 import { useSync } from "./hooks/useSync";
 import { useTheme } from "./hooks/useTheme";
 import { useUrlState } from "./hooks/useUrlState";
-import { allCategories, renamedCategories } from "./lib/categories";
+import {
+  allCategories,
+  renamedCategories,
+  withoutCategory,
+} from "./lib/categories";
 import { clearRecent } from "./lib/recentSearches";
 import { clearSearchCache } from "./lib/searchCache";
 import type { SavedLoop } from "./types/library";
@@ -50,12 +54,14 @@ export default function App() {
     setActiveId(id);
     setPending([]);
   };
-  const renameCategory = (from: string, to: string) => {
+  // Applies a change to every loop's categories and to the picks held for an unsaved loop;
+  // only lists that actually changed are touched
+  const changeCategories = (change: (list: string[]) => string[]) => {
     for (const loop of loops) {
-      const next = renamedCategories(loop.categories, from, to);
+      const next = change(loop.categories);
       if (next !== loop.categories) updateLoop(loop.id, { categories: next });
     }
-    setPending((list) => renamedCategories(list, from, to));
+    setPending(change);
   };
   const rename = (loop: SavedLoop) => {
     const title = window.prompt("Rename loop", loop.title)?.trim();
@@ -132,7 +138,12 @@ export default function App() {
               load({ videoId, start, end, rate }, id)
             }
             onRename={rename}
-            onRenameCategory={renameCategory}
+            onRenameCategory={(from, to) =>
+              changeCategories((list) => renamedCategories(list, from, to))
+            }
+            onRemoveCategory={(name) =>
+              changeCategories((list) => withoutCategory(list, name))
+            }
             onRemove={(id) => {
               remove(id);
               if (id === activeId) setActiveId(null);

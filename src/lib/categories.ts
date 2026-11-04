@@ -35,8 +35,11 @@ export function withCategory(list: string[], name: string, known: string[]) {
   return [...list, known.find((k) => same(k, clean)) ?? clean];
 }
 
-export const withoutCategory = (list: string[], name: string) =>
-  list.filter((item) => !same(item, name));
+// Returns the same list when nothing was removed, so callers can skip unchanged loops
+export function withoutCategory(list: string[], name: string) {
+  const rest = list.filter((item) => !same(item, name));
+  return rest.length === list.length ? list : rest;
+}
 
 // One loop's list after renaming a category; if the loop already has the new name the two merge
 export function renamedCategories(list: string[], from: string, to: string) {
