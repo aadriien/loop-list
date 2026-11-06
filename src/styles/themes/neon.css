@@ -10,7 +10,6 @@
   --font-body:
     "Avenir Next Condensed", "DIN Alternate", "Bahnschrift", system-ui,
     sans-serif;
-  --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
   color-scheme: dark;
 }
 
