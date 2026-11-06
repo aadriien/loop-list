@@ -85,7 +85,7 @@ export default function CategoriesPanel({
 
   return (
     <CollapsiblePanel
-      title="Categories"
+      title="Browse categories"
       storageKey={CATEGORIES_OPEN_KEY}
       className="categories"
     >

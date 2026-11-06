@@ -113,6 +113,13 @@ a {
   border-radius: 999px;
 }
 
+.details {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 12px 24px;
+}
+
 .category-bar,
 .category-bar form {
   display: flex;
@@ -231,7 +238,18 @@ a {
 }
 
 .category-bar .chips {
+  flex: 1 1 100%;
+  flex-wrap: nowrap;
   align-items: center;
+  width: 0;
+  min-width: 100%;
+  height: 36px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.category-bar .chips li {
+  flex: none;
 }
 
 .category-bar .chip {

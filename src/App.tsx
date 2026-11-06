@@ -124,16 +124,18 @@ export default function App() {
                     : undefined
                 }
               />
-              <CategoryBar
-                selected={categories}
-                known={allCategories(loops)}
-                onChange={setCategories}
-              />
-              <LoopTheme
-                linked={linkedTheme}
-                current={theme}
-                onChange={linkTheme}
-              />
+              <div className="details">
+                <CategoryBar
+                  selected={categories}
+                  known={allCategories(loops)}
+                  onChange={setCategories}
+                />
+                <LoopTheme
+                  linked={linkedTheme}
+                  current={theme}
+                  onChange={linkTheme}
+                />
+              </div>
             </>
           ) : (
             <p className="hint">Paste a YouTube link to start looping.</p>

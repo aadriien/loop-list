@@ -26,22 +26,6 @@ export default function CategoryBar({ selected, known, onChange }: Props) {
   return (
     <div className="category-bar">
       <strong>Categories</strong>
-      {selected.length > 0 && (
-        <ul className="chips" aria-label="Categories of this loop">
-          {selected.map((name) => (
-            <li key={name}>
-              <button
-                type="button"
-                className="chip"
-                aria-label={`Remove ${name}`}
-                onClick={() => onChange(withoutCategory(selected, name))}
-              >
-                {name} ×
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
       <form onSubmit={submit}>
         <input
           list="category-suggestions"
@@ -63,6 +47,21 @@ export default function CategoryBar({ selected, known, onChange }: Props) {
           Add
         </button>
       </form>
+      <ul className="chips" aria-label="Categories of this loop">
+        {selected.length === 0 && <li className="hint">No categories yet</li>}
+        {selected.map((name) => (
+          <li key={name}>
+            <button
+              type="button"
+              className="chip"
+              aria-label={`Remove ${name}`}
+              onClick={() => onChange(withoutCategory(selected, name))}
+            >
+              {name} ×
+            </button>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
