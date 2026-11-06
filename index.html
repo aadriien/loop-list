@@ -13,6 +13,25 @@
         if (theme) document.documentElement.dataset.theme = theme;
       } catch {}
     </script>
+    <script>
+      // Owner visits (myself) are counted under /me, separate from everyone else's
+      window.goatcounter = {
+        path: (p) => {
+          try {
+            return JSON.parse(localStorage.getItem("loop-list-auth")).isOwner
+              ? "/me"
+              : p;
+          } catch {
+            return p;
+          }
+        },
+      };
+    </script>
+    <script
+      data-goatcounter="https://looplist.goatcounter.com/count"
+      async
+      src="//gc.zgo.at/count.js"
+    ></script>
   </head>
   <body>
     <div id="root"></div>
