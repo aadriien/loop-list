@@ -3,6 +3,7 @@ import CategoryBar from "./components/CategoryBar";
 import Discover from "./components/Discover";
 import LoopBrowser from "./components/LoopBrowser";
 import Looper from "./components/Looper";
+import LoopTheme from "./components/LoopTheme";
 import SyncPanel from "./components/SyncPanel";
 import ThemePicker from "./components/ThemePicker";
 import VideoInput from "./components/VideoInput";
@@ -21,6 +22,7 @@ import { clearRecent } from "./lib/recentSearches";
 import { clearSearchCache } from "./lib/searchCache";
 import type { SavedLoop } from "./types/library";
 import type { LoopState } from "./types/loop";
+import type { ThemeId } from "./types/theme";
 
 export default function App() {
   const [state, setState] = useUrlState();
@@ -30,10 +32,12 @@ export default function App() {
   const [activeId, setActiveId] = useState<string | null>(null);
   // Categories picked for a loop that hasn't been saved yet; attached on Save loop
   const [pending, setPending] = useState<string[]>([]);
+  const [pendingTheme, setPendingTheme] = useState<ThemeId>();
   const { token, canSearch, signIn, signOut, dropSession } = useAuth(() => {
     setAll([]);
     setActiveId(null);
     setPending([]);
+    setPendingTheme(undefined);
     clearSearchCache();
     clearRecent();
   });
@@ -45,6 +49,12 @@ export default function App() {
     activeLoop
       ? updateLoop(activeLoop.id, { categories: next })
       : setPending(next);
+  const linkedTheme = activeLoop ? activeLoop.theme : pendingTheme;
+  const linkTheme = (next: ThemeId | undefined) => {
+    if (activeLoop) updateLoop(activeLoop.id, { theme: next });
+    else setPendingTheme(next);
+    if (next) setTheme(next);
+  };
 
   const update = (patch: Partial<LoopState>) =>
     setState((s) => ({ ...s, ...patch }));
@@ -53,6 +63,7 @@ export default function App() {
     setLoadKey((k) => k + 1);
     setActiveId(id);
     setPending([]);
+    setPendingTheme(undefined);
   };
   // Applies a change to every loop's categories and to the picks held for an unsaved loop;
   // only lists that actually changed are touched
@@ -93,12 +104,14 @@ export default function App() {
                       videoId: state.videoId,
                       title: title || state.videoId,
                       categories: pending,
+                      theme: pendingTheme,
                       start: state.start,
                       end: state.end,
                       rate: state.rate,
                     }),
                   );
                   setPending([]);
+                  setPendingTheme(undefined);
                 }}
                 onUpdate={
                   activeId
@@ -115,6 +128,11 @@ export default function App() {
                 selected={categories}
                 known={allCategories(loops)}
                 onChange={setCategories}
+              />
+              <LoopTheme
+                linked={linkedTheme}
+                current={theme}
+                onChange={linkTheme}
               />
             </>
           ) : (
@@ -134,9 +152,10 @@ export default function App() {
           <LoopBrowser
             loops={loops}
             activeId={activeId}
-            onSelect={({ id, videoId, start, end, rate }) =>
-              load({ videoId, start, end, rate }, id)
-            }
+            onSelect={({ id, videoId, start, end, rate, theme: linked }) => {
+              load({ videoId, start, end, rate }, id);
+              if (linked) setTheme(linked);
+            }}
             onRename={rename}
             onRenameCategory={(from, to) =>
               changeCategories((list) => renamedCategories(list, from, to))

@@ -1,3 +1,5 @@
+import type { ThemeId } from "./theme";
+
 export interface SavedLoop {
   id: string;
   videoId: string;
@@ -6,6 +8,7 @@ export interface SavedLoop {
   end: number | null;
   rate: number;
   categories: string[];
+  theme?: ThemeId;
   updatedAt: number;
   deleted?: boolean;
 }

@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
-import { DEFAULT_THEME, THEME_STORAGE_KEY, THEMES } from "../constants/themes";
+import { DEFAULT_THEME, THEME_STORAGE_KEY } from "../constants/themes";
+import { isTheme } from "../lib/themes";
 import type { ThemeId } from "../types/theme";
-
-const isTheme = (value: unknown): value is ThemeId =>
-  THEMES.some((t) => t.id === value);
 
 export function useTheme() {
   // index.html applies the stored theme before first paint to avoid a flash

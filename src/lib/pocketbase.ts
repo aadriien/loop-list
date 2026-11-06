@@ -2,6 +2,7 @@ import { API_BASE } from "../constants/sync";
 import type { Session } from "../types/auth";
 import type { SavedLoop } from "../types/library";
 import type { SearchPage } from "../types/search";
+import { isTheme } from "./themes";
 
 export class ApiError extends Error {
   constructor(
@@ -13,10 +14,11 @@ export class ApiError extends Error {
 }
 
 // PocketBase can't store null numbers, so a missing end is sent as 0; loops saved before
-// categories existed come back with categories null
-type RemoteLoop = Omit<SavedLoop, "end" | "categories"> & {
+// categories existed come back with categories null; no theme is an empty string
+type RemoteLoop = Omit<SavedLoop, "end" | "categories" | "theme"> & {
   end: number;
   categories: string[] | null;
+  theme: string;
 };
 
 async function request(path: string, token: string | null, init?: RequestInit) {
@@ -71,6 +73,7 @@ export async function fetchLoops(token: string): Promise<SavedLoop[]> {
     end: r.end || null,
     rate: r.rate,
     categories: r.categories ?? [],
+    theme: isTheme(r.theme) ? r.theme : undefined,
     updatedAt: r.updatedAt,
     deleted: r.deleted,
   }));
@@ -82,6 +85,7 @@ export function pushLoop(token: string, loop: SavedLoop, exists: boolean) {
     ...fields,
     end: loop.end ?? 0,
     deleted: loop.deleted ?? false,
+    theme: loop.theme ?? "",
   };
   return exists
     ? request(`/collections/loops/records/${id}`, token, {
