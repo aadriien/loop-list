@@ -339,9 +339,21 @@ input.time {
   border-radius: var(--radius);
 }
 
-.transport .time {
+/* Fixed-width pieces in one monospace font, so the digits never move the controls */
+.readout {
   font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
   color: var(--muted);
+  white-space: nowrap;
+}
+
+.readout .clock {
+  display: inline-block;
+  text-align: right;
+}
+
+.readout .tenths.off {
+  visibility: hidden;
 }
 
 .range {

@@ -73,9 +73,8 @@
     radial-gradient(ellipse at center, transparent 55%, rgba(0, 0, 0, 0.5));
 }
 
-:root[data-theme="vhs"] .transport .time {
+:root[data-theme="vhs"] .readout {
   color: #fff;
   font-weight: 700;
-  letter-spacing: 0.08em;
   text-shadow: 2px 2px 0 #000;
 }

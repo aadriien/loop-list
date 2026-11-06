@@ -1,5 +1,5 @@
 import { SKIP_SECONDS } from "../constants/loop";
-import { formatTime } from "../lib/time";
+import { formatClock, tenthsDigit } from "../lib/time";
 
 interface Props {
   playing: boolean;
@@ -16,6 +16,8 @@ export default function Transport({
   onToggle,
   onSkip,
 }: Props) {
+  const total = duration ? formatClock(duration) : "-:--";
+
   return (
     <div className="transport">
       <button type="button" onClick={() => onSkip(-SKIP_SECONDS)}>
@@ -27,8 +29,15 @@ export default function Transport({
       <button type="button" onClick={() => onSkip(SKIP_SECONDS)}>
         +{SKIP_SECONDS}s
       </button>
-      <span className="time">
-        {formatTime(time)} / {duration ? formatTime(duration) : "--"}
+      {/* Tenths show only while paused, but their space is always reserved */}
+      <span className="readout">
+        <span className="clock" style={{ minWidth: `${total.length}ch` }}>
+          {formatClock(time)}
+        </span>
+        <span className={playing ? "tenths off" : "tenths"}>
+          .{tenthsDigit(time)}
+        </span>{" "}
+        / {total}
       </span>
     </div>
   );
