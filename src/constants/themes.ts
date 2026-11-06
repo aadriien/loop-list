@@ -15,6 +15,10 @@ export const THEMES: { id: ThemeId; label: string }[] = [
   { id: "airy", label: "Airy" },
 ];
 
+export const THEMES_A_Z = [...THEMES].sort((a, b) =>
+  a.label.localeCompare(b.label),
+);
+
 export const DEFAULT_THEME: ThemeId = "tech";
 
 export const THEME_STORAGE_KEY = "loop-list-theme";

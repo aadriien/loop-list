@@ -1,4 +1,4 @@
-import { THEMES } from "../constants/themes";
+import { THEMES_A_Z } from "../constants/themes";
 import type { ThemeId } from "../types/theme";
 
 interface Props {
@@ -13,7 +13,7 @@ export default function ThemePicker({ theme, onChange }: Props) {
       value={theme}
       onChange={(e) => onChange(e.target.value as ThemeId)}
     >
-      {THEMES.map((t) => (
+      {THEMES_A_Z.map((t) => (
         <option key={t.id} value={t.id}>
           {t.label}
         </option>

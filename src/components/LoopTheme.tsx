@@ -1,4 +1,4 @@
-import { THEMES } from "../constants/themes";
+import { THEMES_A_Z } from "../constants/themes";
 import { isTheme } from "../lib/themes";
 import type { ThemeId } from "../types/theme";
 
@@ -10,6 +10,11 @@ interface Props {
 
 // Links a theme to the loop; applied whenever the saved loop is opened
 export default function LoopTheme({ linked, current, onChange }: Props) {
+  // Array.sort is stable, so the rest stay alphabetical
+  const sorted = [...THEMES_A_Z].sort(
+    (a, b) => Number(b.id === current) - Number(a.id === current),
+  );
+
   return (
     <div className="category-bar">
       <strong>Theme</strong>
@@ -21,7 +26,7 @@ export default function LoopTheme({ linked, current, onChange }: Props) {
         }
       >
         <option value="">None</option>
-        {THEMES.map((t) => (
+        {sorted.map((t) => (
           <option key={t.id} value={t.id}>
             {t.label}
             {t.id === current && " (current)"}
