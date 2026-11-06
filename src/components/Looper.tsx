@@ -49,6 +49,13 @@ export default function Looper({
         onChange={onChange}
         onSeek={(t) => player?.seekTo(t, true)}
       />
+      <Transport
+        playing={playing}
+        time={time}
+        duration={duration}
+        onToggle={() => (playing ? player?.pauseVideo() : player?.playVideo())}
+        onSkip={(s) => player?.seekTo(Math.max(0, now() + s), true)}
+      />
       <div className="times">
         <TimeControl
           label="Start"
@@ -64,15 +71,6 @@ export default function Looper({
         />
       </div>
       <div className="controls">
-        <Transport
-          playing={playing}
-          time={time}
-          duration={duration}
-          onToggle={() =>
-            playing ? player?.pauseVideo() : player?.playVideo()
-          }
-          onSkip={(s) => player?.seekTo(Math.max(0, now() + s), true)}
-        />
         <div className="row">
           <label>
             Speed

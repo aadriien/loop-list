@@ -9,6 +9,9 @@ interface Props {
   onSkip: (seconds: number) => void;
 }
 
+const PLAY_ICON = "M8 5v14l11-7z";
+const PAUSE_ICON = "M6 5h4v14H6zM14 5h4v14h-4z";
+
 export default function Transport({
   playing,
   time,
@@ -23,8 +26,15 @@ export default function Transport({
       <button type="button" onClick={() => onSkip(-SKIP_SECONDS)}>
         -{SKIP_SECONDS}s
       </button>
-      <button type="button" onClick={onToggle}>
-        {playing ? "Pause" : "Play"}
+      <button
+        type="button"
+        className="play"
+        aria-label={playing ? "Pause" : "Play"}
+        onClick={onToggle}
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor">
+          <path d={playing ? PAUSE_ICON : PLAY_ICON} />
+        </svg>
       </button>
       <button type="button" onClick={() => onSkip(SKIP_SECONDS)}>
         +{SKIP_SECONDS}s
