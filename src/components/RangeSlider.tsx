@@ -21,7 +21,8 @@ export default function RangeSlider({
   onChange,
   onSeek,
 }: Props) {
-  if (!duration) return null;
+  // Hold the row's height until the duration is known so the controls below don't jump
+  if (!duration) return <div className="range" />;
   const stop = end ?? duration;
   const pct = (t: number) => (t / duration) * 100;
   const vars = { "--lo": pct(start), "--hi": pct(stop) } as CSSProperties;
