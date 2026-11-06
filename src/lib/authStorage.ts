@@ -6,7 +6,8 @@ export function loadSession(): Session | null {
     const raw = localStorage.getItem(AUTH_STORAGE_KEY);
     if (!raw) return null;
     // Sessions saved before search existed are a bare token string
-    if (!raw.startsWith("{")) return { token: raw, canSearch: false };
+    if (!raw.startsWith("{"))
+      return { token: raw, canSearch: false, isOwner: false };
     const session = JSON.parse(raw);
     return typeof session.token === "string" ? session : null;
   } catch {

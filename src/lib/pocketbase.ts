@@ -38,10 +38,11 @@ const post = (body: object) => ({ method: "POST", body: JSON.stringify(body) });
 
 const toSession = (data: {
   token: string;
-  record: { canSearch?: boolean };
+  record: { canSearch?: boolean; isOwner?: boolean };
 }): Session => ({
   token: data.token,
   canSearch: Boolean(data.record.canSearch),
+  isOwner: Boolean(data.record.isOwner),
 });
 
 export async function signIn(email: string, password: string) {

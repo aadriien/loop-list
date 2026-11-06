@@ -17,13 +17,14 @@ describe("authStorage", () => {
   afterEach(() => vi.unstubAllGlobals());
 
   it("round-trips a session", () => {
-    saveSession({ token: "abc.def.ghi", canSearch: true });
-    expect(loadSession()).toEqual({ token: "abc.def.ghi", canSearch: true });
+    const session = { token: "abc.def.ghi", canSearch: true, isOwner: true };
+    saveSession(session);
+    expect(loadSession()).toEqual(session);
   });
 
   it("is signed out when nothing is stored, and after clearing", () => {
     expect(loadSession()).toBeNull();
-    saveSession({ token: "abc", canSearch: false });
+    saveSession({ token: "abc", canSearch: false, isOwner: false });
     saveSession(null);
     expect(loadSession()).toBeNull();
   });
@@ -33,6 +34,7 @@ describe("authStorage", () => {
     expect(loadSession()).toEqual({
       token: "eyJhbGciOi.payload.signature",
       canSearch: false,
+      isOwner: false,
     });
   });
 
