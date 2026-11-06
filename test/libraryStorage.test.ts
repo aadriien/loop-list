@@ -59,4 +59,15 @@ describe("libraryStorage", () => {
     store.set(LIBRARY_STORAGE_KEY, JSON.stringify([older]));
     expect(loadLibrary()).toEqual([{ ...loop, categories: [] }]);
   });
+
+  it("keeps a known linked theme and drops an unknown one", () => {
+    store.set(
+      LIBRARY_STORAGE_KEY,
+      JSON.stringify([
+        { ...loop, theme: "ocean" },
+        { ...loop, theme: "removed-theme" },
+      ]),
+    );
+    expect(loadLibrary().map((l) => l.theme)).toEqual(["ocean", undefined]);
+  });
 });
