@@ -70,7 +70,7 @@ export default function Looper({
           now={now}
         />
       </div>
-      <div className="controls">
+      <div className="options">
         <div className="row">
           <label>
             Speed
@@ -93,6 +93,8 @@ export default function Looper({
             />
             Loop
           </label>
+        </div>
+        <div className="row actions">
           {onUpdate && (
             <button type="button" onClick={onUpdate}>
               Update loop
@@ -100,9 +102,10 @@ export default function Looper({
           )}
           <button
             type="button"
+            className="primary"
             onClick={() => onSave(player?.getVideoData().title ?? "")}
           >
-            Save loop
+            {onUpdate ? "Save new loop" : "Save loop"}
           </button>
         </div>
       </div>

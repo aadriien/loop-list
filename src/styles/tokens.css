@@ -11,3 +11,8 @@
   --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
   color-scheme: dark;
 }
+
+:root[data-theme="tech"] button.primary {
+  color: var(--bg);
+  background: var(--accent);
+}
