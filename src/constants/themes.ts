@@ -11,6 +11,7 @@ export const THEMES: { id: ThemeId; label: string }[] = [
   { id: "jungle", label: "Jungle Safari" },
   { id: "console", label: "Retro Console" },
   { id: "win95", label: "Early Windows" },
+  { id: "ocean", label: "Ocean Deep" },
   { id: "airy", label: "Airy" },
 ];
 

@@ -9,4 +9,5 @@ export type ThemeId =
   | "jungle"
   | "console"
   | "win95"
+  | "ocean"
   | "airy";
